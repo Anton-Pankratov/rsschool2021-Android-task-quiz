@@ -1,7 +1,8 @@
-package com.rsschool.quiz
+package com.rsschool.quiz.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.rsschool.quiz.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
