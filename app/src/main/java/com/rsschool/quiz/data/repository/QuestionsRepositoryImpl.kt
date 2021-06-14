@@ -1,9 +1,9 @@
 package com.rsschool.quiz.data.repository
 
-import com.rsschool.quiz.data.source.QuestionEntity
-import com.rsschool.quiz.data.source.ServerSourceCaller
+import com.rsschool.quiz.data.source.RemoteQuestion
+import com.rsschool.quiz.data.source.ServerSourceCallerImpl
 
-class QuestionsRepositoryImpl(private val dataSource: ServerSourceCaller): QuestionsRepository {
+class QuestionsRepositoryImpl(private val dataSource: ServerSourceCallerImpl): QuestionsRepository {
 
-    override fun fetchQuestionById(id: Int): QuestionEntity = dataSource.fetchQuestion(id)
+    override fun fetchQuestions() = dataSource.fetchQuestions()
 }

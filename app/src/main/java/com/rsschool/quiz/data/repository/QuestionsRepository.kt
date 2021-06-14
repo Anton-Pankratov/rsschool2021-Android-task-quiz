@@ -1,8 +1,11 @@
 package com.rsschool.quiz.data.repository
 
-import com.rsschool.quiz.data.source.QuestionEntity
+import com.rsschool.quiz.data.source.RemoteQuestion
 
 interface QuestionsRepository {
 
-    fun fetchQuestionById(id: Int): QuestionEntity
+    fun fetchQuestions(): List<RemoteQuestion>
+
+    fun saveOrUpdate(questions: List<RemoteQuestion>)
+
 }
