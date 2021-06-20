@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/margin_padding_size">
 
-    <androidx.core.widget.NestedScrollView
+    <TextView
+        android:id="@+id/title_question_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_padding_size" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -14,32 +19,6 @@
         <RadioGroup
             android:id="@+id/questions_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/first_question_rb"
-                style="@style/QuestionRadioButton"
-                tools:text="First question" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/second_question_rb"
-                style="@style/QuestionRadioButton"
-                tools:text="Second question" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/third_question_rb"
-                style="@style/QuestionRadioButton"
-                tools:text="Third question" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/fourth_question_rb"
-                style="@style/QuestionRadioButton"
-                tools:text="Fourth question" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/fifth_question_rb"
-                style="@style/QuestionRadioButton"
-                tools:text="Fifth question" />
-        </RadioGroup>
-    </androidx.core.widget.NestedScrollView>
+            android:layout_height="wrap_content" />
+    </ScrollView>
 </LinearLayout>
