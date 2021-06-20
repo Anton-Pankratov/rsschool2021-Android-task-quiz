@@ -1,128 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_padding_size">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="@dimen/zero_size"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RadioGroup
+            android:id="@+id/questions_rv"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:fitsSystemWindows="true"
-            app:navigationContentDescription="Back to the previous question"
-            app:navigationIcon="@drawable/ic_baseline_chevron_left_24"
-            app:title="@string/toolbar_title" />
+            android:layout_height="match_parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/first_question_rb"
+                style="@style/QuestionRadioButton"
+                tools:text="First question" />
 
-    <ScrollView
-        android:id="@+id/scroll"
-        android:layout_width="@dimen/zero_size"
-        android:layout_height="@dimen/zero_size"
-        app:layout_constraintBottom_toTopOf="@id/previous_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/second_question_rb"
+                style="@style/QuestionRadioButton"
+                tools:text="Second question" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/third_question_rb"
+                style="@style/QuestionRadioButton"
+                tools:text="Third question" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/margin_start_guideline"
-                style="@style/VerticalGuideline"
-                app:layout_constraintGuide_begin="@dimen/margin_padding_size" />
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/fourth_question_rb"
+                style="@style/QuestionRadioButton"
+                tools:text="Fourth question" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/margin_end_guideline"
-                style="@style/VerticalGuideline"
-                app:layout_constraintGuide_end="@dimen/margin_padding_size" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/margin_top_guideline"
-                style="@style/HorizontalGuideline"
-                app:layout_constraintGuide_begin="@dimen/margin_padding_size" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/margin_bottom_guideline"
-                style="@style/HorizontalGuideline"
-                app:layout_constraintGuide_end="@dimen/margin_padding_size" />
-
-            <TextView
-                android:id="@+id/question"
-                android:layout_width="@dimen/zero_size"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                app:layout_constraintEnd_toEndOf="@id/margin_end_guideline"
-                app:layout_constraintStart_toStartOf="@id/margin_start_guideline"
-                app:layout_constraintTop_toTopOf="@id/margin_top_guideline"
-                tools:text="Est-ce qu'il travaille a Paris?" />
-
-            <RadioGroup
-                android:id="@+id/radio_group"
-                android:layout_width="@dimen/zero_size"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@id/margin_end_guideline"
-                app:layout_constraintStart_toStartOf="@id/margin_start_guideline"
-                app:layout_constraintTop_toBottomOf="@id/question">
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/option_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Option 1" />
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/option_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Option 2" />
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/option_three"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Option 3" />
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/option_four"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:checked="true"
-                    tools:text="Option 4" />
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/option_five"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Option 5" />
-
-            </RadioGroup>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/previous_button"
-        style="@style/QuestionIterateButton"
-        android:text="@string/button_previous_question"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/next_button"
-        style="@style/QuestionIterateButton"
-        android:text="@string/button_next_question"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/fifth_question_rb"
+                style="@style/QuestionRadioButton"
+                tools:text="Fifth question" />
+        </RadioGroup>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

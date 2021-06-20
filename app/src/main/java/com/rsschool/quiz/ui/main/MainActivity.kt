@@ -2,15 +2,37 @@ package com.rsschool.quiz.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import androidx.fragment.app.FragmentTransaction
 import com.rsschool.quiz.R
-import org.koin.android.ext.android.inject
+import com.rsschool.quiz.databinding.ActivityMainBinding
+import com.rsschool.quiz.ui.question.QuestionFragment
 
 class MainActivity : AppCompatActivity() {
 
-    val viewModel: MainViewModel by inject()
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+
+        startFirstQuestion()
+    }
+
+    private fun startFirstQuestion() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.container, QuestionFragment())
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun setPreviousQuestionClick() {
+
+    }
+
+    private fun setNextQuestionClick() {
+
     }
 }

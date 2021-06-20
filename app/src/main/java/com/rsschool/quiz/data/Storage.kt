@@ -1,22 +1,22 @@
-package com.rsschool.quiz.data.source
+package com.rsschool.quiz.data
 
 /**
  * Imitation of Server's Storage
  */
 
-class ServerStorage {
+object Storage {
 
     fun provideQuestions() =
         listOf(firstQuestion, secondQuestion, thirdQuestion, fourthQuestion, fifthQuestion)
 
-    private val firstQuestion = RemoteQuestion(
+    private val firstQuestion = QuestionEntity(
         id = 1,
         title = "В какой версии Android Studio начал нативно поддерживаться Kotlin?",
         answerVariants = listOf("2.3.3", "3.0", "3.6", "4.0", "4.1"),
         answerCorrect = 0
     )
 
-    private val secondQuestion = RemoteQuestion(
+    private val secondQuestion = QuestionEntity(
         id = 2,
         title = "В каком году права на обладание островом Kotlin получили одновременно Новгородское" +
                 "княжество и Швеция?",
@@ -24,7 +24,7 @@ class ServerStorage {
         answerCorrect = 2
     )
 
-    private val thirdQuestion = RemoteQuestion(
+    private val thirdQuestion = QuestionEntity(
         id = 3,
         title = "Какое утверждение относительно языка Kotlin является неверным?",
         answerVariants = listOf(
@@ -38,7 +38,7 @@ class ServerStorage {
         answerCorrect = 4
     )
 
-    private val fourthQuestion = RemoteQuestion(
+    private val fourthQuestion = QuestionEntity(
         id = 4,
         title = "Сколько примерно необходимо преодолеть километров по прямой чтобы из острова " +
                 "Котлин попасть в Маунтин-Вью (Сан-Франциско)?",
@@ -46,7 +46,7 @@ class ServerStorage {
         answerCorrect = 3
     )
 
-    private val fifthQuestion = RemoteQuestion(
+    private val fifthQuestion = QuestionEntity(
         id = 5,
         title = "В каком классе языка Java имеется функция canExecute() без входных параметров и " +
                 "возвращающая результат типа Boolean?",
@@ -54,10 +54,3 @@ class ServerStorage {
         answerCorrect = 1
     )
 }
-
-data class RemoteQuestion(
-    val id: Int,
-    val title: String,
-    val answerVariants: List<String>,
-    val answerCorrect: Int
-)

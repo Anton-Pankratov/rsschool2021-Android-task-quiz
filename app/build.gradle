@@ -22,8 +22,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        viewBinding true
+
+    viewBinding {
+        enabled true
     }
 }
 
@@ -39,12 +40,4 @@ dependencies {
     /** Design */
     implementation "com.google.android.material:material:$material_design"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
-
-    /** Dependency Injection */
-    implementation "io.insert-koin:koin-android:$koin"
-
-    /** Database */
-    implementation "androidx.room:room-ktx:$room"
-    implementation "androidx.room:room-compliler$room"
-    implementation "androidx.room:room-runtime:$room"
 }
