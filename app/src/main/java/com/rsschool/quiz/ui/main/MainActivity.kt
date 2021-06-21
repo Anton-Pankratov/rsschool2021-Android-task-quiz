@@ -2,10 +2,14 @@ package com.rsschool.quiz.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.rsschool.quiz.data.Storage
 import com.rsschool.quiz.data.repository.QuizRepository
 import com.rsschool.quiz.databinding.ActivityMainBinding
 import com.rsschool.quiz.ui.question.QuestionFragment
+import java.util.*
+import kotlin.collections.ArrayDeque
+import com.rsschool.quiz.utils.FragmentTransactionAction as Action
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
@@ -18,7 +22,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val fragmentContainerId
         get() = binding?.container?.id
 
-    val userAnswerIds = MutableList(Storage.questions.size) { -1 }
+    val userAnswerIds = ArrayDeque<Pair<Int, Int>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +33,24 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun showFirstQuestionScreen() {
-        val transaction = supportFragmentManager.beginTransaction()
-        fragmentContainerId?.let { transaction.add(it, QuestionFragment()) }
-        transaction.addToBackStack(null)
-        transaction.commit()
+        QuestionFragment().apply {
+            userAnswerIds.addFirst(this.id to -1)
+            Action.ADD_FIRST.makeTransactionWith(this)
+        }
     }
 
-    override fun showQuestionScreen() {
-        val transaction = supportFragmentManager.beginTransaction()
-        fragmentContainerId?.let { transaction.replace(it, QuestionFragment(2)) }
-        transaction.addToBackStack(null)
-        transaction.commit()
+    override fun showNextQuestionScreen() {
+        QuestionFragment().apply {
+            userAnswerIds.add(this.id to -1)
+            Action.REPLACE.makeTransactionWith(this)
+        }
+    }
+
+    override fun showPreviousQuestionScreen() {
+        supportFragmentManager.findFragmentByTag("this").apply {
+            userAnswerIds.remove(this?.id to -1 )
+            Action.REMOVE.makeTransactionWith(this as QuestionFragment)
+        }
     }
 
     private fun setViews() {
@@ -57,6 +68,19 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private fun setOnPreviousQuestionClick() {
         binding?.previousButton?.setOnClickListener {
             presenter.listenOnPreviousQuestionClick()
+        }
+    }
+
+    private fun Action.makeTransactionWith(fragment: QuestionFragment) {
+        supportFragmentManager.beginTransaction().apply {
+            when (this@makeTransactionWith) {
+                Action.ADD_FIRST, Action.REPLACE -> {
+                    fragmentContainerId?.let { add(it, fragment) }
+                    addToBackStack(null)
+                }
+                Action.REMOVE -> fragmentContainerId?.let { replace(it, fragment) }
+            }
+            commit()
         }
     }
 }

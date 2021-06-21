@@ -4,7 +4,8 @@ interface MainContract {
 
     interface View {
         fun showFirstQuestionScreen()
-        fun showQuestionScreen()
+        fun showNextQuestionScreen()
+        fun showPreviousQuestionScreen()
     }
 
     interface Presenter {

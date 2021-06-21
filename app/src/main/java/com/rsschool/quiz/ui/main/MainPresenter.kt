@@ -13,10 +13,10 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
     }
 
     override fun listenOnPreviousQuestionClick() {
-        view.showQuestionScreen()
+        view.showNextQuestionScreen()
     }
 
     override fun listenOnNextQuestionClick() {
-        view.showQuestionScreen()
+        view.showPreviousQuestionScreen()
     }
 }
