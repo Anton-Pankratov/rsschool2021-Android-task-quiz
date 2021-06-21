@@ -9,4 +9,6 @@ interface IRepository {
     fun getQuestionById(questionId: Int): QuestionEntity
 
     fun getQuestionsCount(): Int
+
+    fun getAnswersList(): MutableList<Int>
 }

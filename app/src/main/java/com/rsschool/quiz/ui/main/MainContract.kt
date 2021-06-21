@@ -6,14 +6,17 @@ import com.rsschool.quiz.ui.pager.PagerPresenter
 interface MainContract {
 
     interface View {
+        fun setOnNavigationIconClickListener()
         fun setPagerPresenter(pagerPresenter: PagerPresenter)
-        fun setViewsByCurrentFragment()
         fun setOnChangePageListener(listener: OnChangePageListener)
         fun showNextQuestionPage()
         fun showPreviousQuestionPage()
+        fun getSignalAboutAnswerSelected()
+        fun setViewsByCurrentFragment()
     }
 
     interface Presenter {
+        fun listenOnNavigationIconClick()
         fun listenCurrentFragment(
             pagerPresenter: PagerPresenter,
             onCurrentFragmentListener: OnCurrentFragmentListener
@@ -22,5 +25,6 @@ interface MainContract {
         fun listenOnPreviousQuestionClick()
         fun initOnChangePageListener(listener: OnChangePageListener)
         fun setOnChangePageAction(action: String)
+        fun getAnswersList(): MutableList<Int>?
     }
 }

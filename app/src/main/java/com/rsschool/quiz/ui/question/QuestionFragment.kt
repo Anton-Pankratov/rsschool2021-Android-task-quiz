@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
+import com.rsschool.quiz.ui.main.MainActivity
 
 class QuestionFragment(var questionId: Int = 0) : Fragment(), QuestionContract.View {
 
-    private var _binding: FragmentQuestionBinding? = null
-    private val binding get() = _binding
+    private var binding: FragmentQuestionBinding? = null
 
     private val presenter = QuestionPresenter(this)
 
@@ -20,7 +20,7 @@ class QuestionFragment(var questionId: Int = 0) : Fragment(), QuestionContract.V
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentQuestionBinding.inflate(
+        binding = FragmentQuestionBinding.inflate(
             inflater, container, false
         )
         return binding?.root
@@ -30,6 +30,11 @@ class QuestionFragment(var questionId: Int = 0) : Fragment(), QuestionContract.V
         super.onViewCreated(view, savedInstanceState)
         listenUserSelectedQuestion()
         presenter.onSetQuestionParams(questionId = questionId)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     override fun showQuestionTitle(title: String) {
@@ -48,9 +53,16 @@ class QuestionFragment(var questionId: Int = 0) : Fragment(), QuestionContract.V
         }
     }
 
+    override fun setAnswerSelectedSignal() {
+        (activity as MainActivity).getSignalAboutAnswerSelected()
+    }
+
     private fun listenUserSelectedQuestion() {
         binding?.questionsRv?.setOnCheckedChangeListener { _, checkedId ->
-            presenter.listenSelectedQuestion((questionId - 1) to checkedId)
+            presenter.apply {
+                listenSelectedQuestion((questionId - 1) to checkedId)
+                passAnswerSelectedSignal()
+            }
         }
     }
 

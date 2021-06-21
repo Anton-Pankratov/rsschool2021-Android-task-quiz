@@ -24,4 +24,8 @@ class QuestionPresenter(val view: QuestionContract.View) : QuestionContract.Pres
     override fun listenSelectedQuestion(answerId: Pair<Int, Int>) {
         repository?.keepUserAnswer(answerId)
     }
+
+    override fun passAnswerSelectedSignal() {
+        view.setAnswerSelectedSignal()
+    }
 }

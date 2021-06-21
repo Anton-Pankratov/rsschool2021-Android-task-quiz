@@ -37,9 +37,14 @@ class PagerFragment : Fragment(), PagerContract.View {
         setChangePageAction()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
+
     override fun setViewPager() {
         binding?.pager?.apply {
-         //   isUserInputEnabled = false
+            isUserInputEnabled = false
             adapter = PagerAdapter(
                 this@PagerFragment, presenter.createQuestionsFragments()
             )

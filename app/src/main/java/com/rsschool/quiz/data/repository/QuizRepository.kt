@@ -19,4 +19,6 @@ class QuizRepository : IRepository {
     override fun getQuestionById(questionId: Int) = storage.questions[questionId - 1]
 
     override fun getQuestionsCount() = storage.questions.size
+
+    override fun getAnswersList() = storage.userAnswerIds
 }
