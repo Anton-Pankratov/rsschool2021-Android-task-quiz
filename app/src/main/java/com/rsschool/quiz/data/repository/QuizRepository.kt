@@ -1,6 +1,7 @@
 package com.rsschool.quiz.data.repository
 
 import android.util.Log
+import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.data.Storage
 
 class QuizRepository : IRepository {
@@ -20,5 +21,7 @@ class QuizRepository : IRepository {
 
     override fun getQuestionsCount() = storage.questions.size
 
-    override fun getAnswersList() = storage.userAnswerIds
+    override fun getAnswers() = storage.userAnswerIds
+
+    override fun getQuestions() = storage.questions
 }

@@ -11,8 +11,9 @@ interface MainContract {
         fun setOnChangePageListener(listener: OnChangePageListener)
         fun showNextQuestionPage()
         fun showPreviousQuestionPage()
-        fun getSignalAboutAnswerSelected()
+        fun setSignalAboutAnswerSelected()
         fun setViewsByCurrentFragment()
+        fun setViewsInvisibleOnResultPage()
     }
 
     interface Presenter {
@@ -26,5 +27,6 @@ interface MainContract {
         fun initOnChangePageListener(listener: OnChangePageListener)
         fun setOnChangePageAction(action: String)
         fun getAnswersList(): MutableList<Int>?
+        fun makeViewsInvisibleOnResultPage()
     }
 }

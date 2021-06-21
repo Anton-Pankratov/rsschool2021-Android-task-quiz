@@ -26,26 +26,28 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/pager_fragment"
+        android:id="@+id/fragment_container"
         android:name="com.rsschool.quiz.ui.pager.PagerFragment"
-        android:layout_width="@dimen/zero_size"
-        android:layout_height="@dimen/zero_size"
-        android:layout_below="@id/appBarLayout"
-        android:layout_above="@+id/next_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="70dp" />
 
     <Button
         android:id="@+id/previous_button"
         style="@style/QuestionIterateButton"
-        android:text="@string/button_previous_question"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:text="@string/button_previous_question" />
 
     <Button
         android:id="@+id/next_button"
         style="@style/QuestionIterateButton"
-        android:text="@string/button_next_question"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:text="@string/button_next_question" />
 </RelativeLayout>

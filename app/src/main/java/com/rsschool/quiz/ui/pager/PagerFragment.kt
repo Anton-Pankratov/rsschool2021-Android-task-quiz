@@ -4,57 +4,51 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.rsschool.quiz.databinding.FragmentPagerBinding
+import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.main.MainActivity
 import com.rsschool.quiz.ui.main.OnChangePageListener
 import com.rsschool.quiz.utils.NEXT
+import com.rsschool.quiz.utils.PREVIOUS
+import com.rsschool.quiz.utils.SUBMIT
 
-class PagerFragment : Fragment(), PagerContract.View {
+class PagerFragment : BaseFragment<FragmentPagerBinding>(), PagerContract.View {
 
-    private var binding: FragmentPagerBinding? = null
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPagerBinding
+        get() = FragmentPagerBinding::inflate
 
-    private val presenter = PagerPresenter(this)
+    override val presenter = PagerPresenter(this)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentPagerBinding.inflate(
-            inflater, container, false
-        )
-        return binding?.root
-    }
+    private var fragmentsCount = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.fragmentFactory = QuizFragmentFactory()
-        presenter.initViewPager()
-        setPagerPresenterInActivity()
+        presenter.apply {
+            initViewPager()
+            providePagerPresenter()
+            listenPageChangeAction()
+        }
         setCurrentFragmentToListen()
-        setChangePageAction()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
     }
 
     override fun setViewPager() {
-        binding?.pager?.apply {
-            isUserInputEnabled = false
-            adapter = PagerAdapter(
-                this@PagerFragment, presenter.createQuestionsFragments()
-            )
+        presenter.createFragments().let { list ->
+            fragmentsCount = list.size
+            binding.pager.apply {
+                isUserInputEnabled = false
+                adapter = PagerAdapter(
+                    this@PagerFragment, list
+                )
+            }
         }
     }
 
     override fun setCurrentFragmentToListen() {
-        binding?.pager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                binding?.pager?.currentItem?.let { presenter.setCurrentFragmentInListener(it) }
+                binding.pager.currentItem.let { presenter.setCurrentFragmentInListener(it) }
             }
         })
     }
@@ -66,11 +60,11 @@ class PagerFragment : Fragment(), PagerContract.View {
     override fun setChangePageAction() {
         (activity as MainActivity).setOnChangePageListener(object : OnChangePageListener {
             override fun onChangePage(action: String) {
-                binding?.pager?.apply {
-                    if (action == NEXT) {
-                        currentItem += 1
-                    } else {
-                        currentItem -= 1
+                binding.pager.apply {
+                    when (action) {
+                        NEXT -> currentItem += 1
+                        PREVIOUS ->  currentItem -= 1
+                        SUBMIT -> currentItem = fragmentsCount - 1
                     }
                 }
             }

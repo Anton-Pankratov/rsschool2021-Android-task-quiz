@@ -1,6 +1,6 @@
 package com.rsschool.quiz.ui.pager
 
-import com.rsschool.quiz.ui.question.QuestionFragment
+import androidx.fragment.app.Fragment
 
 interface PagerContract {
 
@@ -13,7 +13,7 @@ interface PagerContract {
 
     interface Presenter {
         fun initViewPager()
-        fun createQuestionsFragments(): List<QuestionFragment>
+        fun createFragments(): List<Fragment>
         fun initOnCurrentFragmentListener(listener: OnCurrentFragmentListener)
         fun setCurrentFragmentInListener(questionId: Int)
         fun providePagerPresenter()

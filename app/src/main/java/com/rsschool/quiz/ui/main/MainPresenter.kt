@@ -1,19 +1,14 @@
 package com.rsschool.quiz.ui.main
 
-import com.rsschool.quiz.data.repository.IRepository
-import com.rsschool.quiz.data.repository.QuizRepository
+import com.rsschool.quiz.ui.base.BasePresenter
 import com.rsschool.quiz.ui.pager.OnCurrentFragmentListener
 import com.rsschool.quiz.ui.pager.PagerPresenter
 
-class MainPresenter(private val view: MainContract.View) : MainContract.Presenter {
-
-    private var repository: IRepository? = null
+class MainPresenter(private val view: MainContract.View) : BasePresenter(), MainContract.Presenter {
 
     private var onChangePageListener: OnChangePageListener? = null
 
-    init {
-        repository = QuizRepository()
-    }
+    init { initRepository() }
 
     override fun listenOnNavigationIconClick() {
         view.setOnNavigationIconClickListener()
@@ -42,5 +37,9 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
         onChangePageListener?.onChangePage(action)
     }
 
-    override fun getAnswersList() = repository?.getAnswersList()
+    override fun getAnswersList() = repository?.getAnswers()
+
+    override fun makeViewsInvisibleOnResultPage() {
+        view.setViewsInvisibleOnResultPage()
+    }
 }

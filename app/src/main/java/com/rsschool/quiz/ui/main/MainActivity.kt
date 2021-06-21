@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
+import androidx.core.view.isVisible
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.ActivityMainBinding
 import com.rsschool.quiz.ui.pager.OnCurrentFragmentListener
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private var binding: ActivityMainBinding? = null
 
-    private val presenter = MainPresenter(this)
+    private val mainPresenter = MainPresenter(this)
 
     private var _pagerPresenter: PagerPresenter? = null
     private val pagerPresenter get() = _pagerPresenter
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             setSupportActionBar(this)
             setNavigationOnClickListener {
                 if (currentFragmentId != 0) {
-                    presenter.setOnChangePageAction(PREVIOUS)
+                    mainPresenter.setOnChangePageAction(PREVIOUS)
                 }
             }
         }
@@ -59,79 +59,92 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun setOnChangePageListener(listener: OnChangePageListener) {
-        presenter.initOnChangePageListener(listener)
+        mainPresenter.initOnChangePageListener(listener)
     }
 
     override fun showNextQuestionPage() {
-        presenter.setOnChangePageAction(NEXT)
+        mainPresenter.setOnChangePageAction(
+            if (currentFragmentId != mainPresenter.getAnswersList()?.size?.minus(1))
+                NEXT else SUBMIT
+        )
     }
 
     override fun showPreviousQuestionPage() {
-        presenter.setOnChangePageAction(PREVIOUS)
+        mainPresenter.setOnChangePageAction(PREVIOUS)
     }
 
     private fun setOnNextQuestionClick() {
         binding?.nextButton?.setOnClickListener {
-            presenter.listenOnNextQuestionClick()
+            mainPresenter.listenOnNextQuestionClick()
         }
     }
 
     private fun setOnPreviousQuestionClick() {
         binding?.previousButton?.setOnClickListener {
-            presenter.listenOnPreviousQuestionClick()
+            mainPresenter.listenOnPreviousQuestionClick()
         }
     }
 
-    override fun getSignalAboutAnswerSelected() {
-        if (binding?.nextButton?.isEnabled == false) {
-            binding?.nextButton?.isEnabled = true
+    override fun setSignalAboutAnswerSelected() {
+        binding?.nextButton?.apply {
+            if (!isEnabled) isEnabled = true
         }
     }
 
     override fun setViewsByCurrentFragment() {
         pagerPresenter?.initOnCurrentFragmentListener(object : OnCurrentFragmentListener {
             override fun onCurrentFragment(questionId: Int) {
-                currentFragmentId = questionId
-                val questions = presenter.getAnswersList()
+                val questions = mainPresenter.getAnswersList()
                 if (!questions.isNullOrEmpty()) {
+                    if (questionId <= questions.size.minus(1)) {
+                        currentFragmentId = questionId
 
-                    binding?.apply {
+                        binding?.apply {
 
-                        toolbar.setQuestionNumber(questionId)
-                        nextButton.setAccessModeBy { questions[questionId] != -1 }
+                            toolbar.setQuestionNumber(questionId)
+                            nextButton.setAccessModeBy { questions[questionId] != -1 }
 
-                        if (questionId == 0) {
-                            previousButton.setAccessMode(DISABLED)
-                            toolbar.setAccessMode(DISABLED)
-                        } else {
-                            previousButton.setAccessMode(ENABLED)
-                            toolbar.setAccessMode(ENABLED)
-                            nextButton.setButtonActionName(
-                                if (questionId == questions.size - 1)
-                                    SUBMIT else NEXT
-                            )
+                            if (questionId == 0) {
+                                previousButton.setAccessMode(DISABLED)
+                                toolbar.setAccessMode(DISABLED)
+                            } else {
+                                previousButton.setAccessMode(ENABLED)
+                                toolbar.setAccessMode(ENABLED)
+                                nextButton.setButtonActionName(
+                                    if (questionId == questions.size - 1)
+                                        SUBMIT else NEXT
+                                )
+                            }
                         }
-                    }
+                    } else mainPresenter.makeViewsInvisibleOnResultPage()
                 }
             }
         })
     }
 
+    override fun setViewsInvisibleOnResultPage() {
+        binding?.apply {
+            appBarLayout.isVisible = false
+            nextButton.isVisible = false
+            previousButton.isVisible = false
+        }
+    }
+
     private fun Toolbar.setAccessMode(mode: String) {
         navigationIcon = ContextCompat.getDrawable(
             context,
-            if (mode == ENABLED) {
+            if (mode == ENABLED)
                 R.drawable.ic_toolbar_back_enabled
-            } else {
+            else
                 R.drawable.ic_toolbar_back_disabled
-            }
+
         )
     }
 
     private fun Toolbar.setQuestionNumber(number: Int) {
         title = String.format(
-            this@MainActivity.resources
-                .getString(R.string.toolbar_title), number + 1
+            this@MainActivity
+                .getStringResource(R.string.toolbar_title), number + 1
         )
     }
 
@@ -144,12 +157,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     private fun Button.setButtonActionName(name: String) {
-        this@MainActivity.resources.apply {
-            text = if (name == SUBMIT) {
-                getString(R.string.button_submit_answers)
-            } else {
-                getString(R.string.button_next_question)
-            }
-        }
+        this.text = getStringResource(
+            if (name == SUBMIT)
+                R.string.button_submit_answers
+            else
+                R.string.button_next_question
+        )
     }
 }

@@ -2,15 +2,10 @@ package com.rsschool.quiz.ui.question
 
 import com.rsschool.quiz.data.repository.IRepository
 import com.rsschool.quiz.data.repository.QuizRepository
+import com.rsschool.quiz.ui.base.BasePresenter
 
-class QuestionPresenter(val view: QuestionContract.View) : QuestionContract.Presenter {
-
-    private var _repository: IRepository? = null
-    private val repository get() = _repository
-
-    init {
-        _repository = QuizRepository()
-    }
+class QuestionPresenter(val view: QuestionContract.View)
+    : BasePresenter(), QuestionContract.Presenter {
 
     override fun onSetQuestionParams(questionId: Int) {
         view.apply {
