@@ -8,7 +8,7 @@ interface QuestionContract {
     }
 
     interface Presenter {
-        fun onCreateQuestionFragment(questionId: Int)
-        fun listenSelectedQuestion(answerId: Int)
+        fun onSetQuestionParams(questionId: Int)
+        fun listenSelectedQuestion(answerId: Pair<Int, Int>)
     }
 }

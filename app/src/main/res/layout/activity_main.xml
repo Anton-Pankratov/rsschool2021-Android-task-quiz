@@ -26,9 +26,10 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container"
+        android:id="@+id/pager_fragment"
+        android:name="com.rsschool.quiz.ui.pager.PagerFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/appBarLayout"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"/>

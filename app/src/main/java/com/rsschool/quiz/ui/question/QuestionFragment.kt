@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 
-class QuestionFragment(private val questionId: Int = 1) : Fragment(), QuestionContract.View {
+class QuestionFragment(var questionId: Int = 0) : Fragment(), QuestionContract.View {
 
     private var _binding: FragmentQuestionBinding? = null
     private val binding get() = _binding
@@ -29,7 +29,7 @@ class QuestionFragment(private val questionId: Int = 1) : Fragment(), QuestionCo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listenUserSelectedQuestion()
-        presenter.onCreateQuestionFragment(questionId = questionId)
+        presenter.onSetQuestionParams(questionId = questionId)
     }
 
     override fun showQuestionTitle(title: String) {
@@ -38,8 +38,10 @@ class QuestionFragment(private val questionId: Int = 1) : Fragment(), QuestionCo
 
     override fun showAnswerVariants(variants: List<String>) {
         binding?.questionsRv.apply {
+            var btnId = 0
             variants.forEach {
                 this?.addView(MaterialRadioButton(requireContext()).apply {
+                    id = btnId++
                     text = it
                 })
             }
@@ -48,7 +50,11 @@ class QuestionFragment(private val questionId: Int = 1) : Fragment(), QuestionCo
 
     private fun listenUserSelectedQuestion() {
         binding?.questionsRv?.setOnCheckedChangeListener { _, checkedId ->
-            presenter.listenSelectedQuestion(checkedId)
+            presenter.listenSelectedQuestion((questionId - 1) to checkedId)
         }
+    }
+
+    private companion object {
+        const val ANSWER_ID_KEY = "answerIdKey"
     }
 }

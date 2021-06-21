@@ -5,6 +5,8 @@ object Storage {
     val questions: List<QuestionEntity> =
         listOf(firstQuestion, secondQuestion, thirdQuestion, fourthQuestion, fifthQuestion)
 
+    val userAnswerIds = MutableList(questions.size) { -1 }
+
     private val firstQuestion get() = QuestionEntity(
         id = 1,
         title = "В какой версии Android Studio начал нативно поддерживаться Kotlin?",

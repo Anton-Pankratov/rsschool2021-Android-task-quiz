@@ -6,17 +6,11 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
 
     private val storage = Storage
 
-    override fun getQuestionsCount() = storage.questions.size
-
-    override fun startWithTheFirstQuestion() {
-        view.showFirstQuestionScreen()
-    }
-
-    override fun listenOnPreviousQuestionClick() {
+    override fun listenOnNextQuestionClick() {
         view.showNextQuestionScreen()
     }
 
-    override fun listenOnNextQuestionClick() {
+    override fun listenOnPreviousQuestionClick() {
         view.showPreviousQuestionScreen()
     }
 }

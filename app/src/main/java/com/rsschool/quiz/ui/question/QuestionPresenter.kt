@@ -1,6 +1,5 @@
 package com.rsschool.quiz.ui.question
 
-import com.rsschool.quiz.data.Storage
 import com.rsschool.quiz.data.repository.IRepository
 import com.rsschool.quiz.data.repository.QuizRepository
 
@@ -13,7 +12,7 @@ class QuestionPresenter(val view: QuestionContract.View) : QuestionContract.Pres
         _repository = QuizRepository()
     }
 
-    override fun onCreateQuestionFragment(questionId: Int) {
+    override fun onSetQuestionParams(questionId: Int) {
         view.apply {
             repository?.getQuestionById(questionId)?.apply {
                 title?.let { showQuestionTitle(it) }
@@ -22,10 +21,7 @@ class QuestionPresenter(val view: QuestionContract.View) : QuestionContract.Pres
         }
     }
 
-    val storage = Storage
-
-    override fun listenSelectedQuestion(answerId: Int) {
-       /* repository?.keepAnswerOnQuestion(answerId)
-        Log.d("STORAGE", "Storage keep question with id ${storage.userAnswerIds}")*/
+    override fun listenSelectedQuestion(answerId: Pair<Int, Int>) {
+        repository?.keepUserAnswer(answerId)
     }
 }
