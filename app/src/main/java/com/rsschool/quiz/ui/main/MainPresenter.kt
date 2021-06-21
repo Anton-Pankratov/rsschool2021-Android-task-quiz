@@ -1,16 +1,32 @@
 package com.rsschool.quiz.ui.main
 
-import com.rsschool.quiz.data.Storage
+import com.rsschool.quiz.ui.pager.OnCurrentFragmentListener
+import com.rsschool.quiz.ui.pager.PagerPresenter
 
 class MainPresenter(private val view: MainContract.View) : MainContract.Presenter {
 
-    private val storage = Storage
+    private var onChangePageListener: OnChangePageListener? = null
+
+    override fun listenCurrentFragment(
+        pagerPresenter: PagerPresenter,
+        onCurrentFragmentListener: OnCurrentFragmentListener
+    ) {
+        pagerPresenter.initOnCurrentFragmentListener(onCurrentFragmentListener)
+    }
 
     override fun listenOnNextQuestionClick() {
-        view.showNextQuestionScreen()
+        view.showNextQuestionPage()
     }
 
     override fun listenOnPreviousQuestionClick() {
-        view.showPreviousQuestionScreen()
+        view.showPreviousQuestionPage()
+    }
+
+    override fun initOnChangePageListener(listener: OnChangePageListener) {
+        onChangePageListener = listener
+    }
+
+    override fun setOnChangePageAction(action: String) {
+        onChangePageListener?.onChangePage(action)
     }
 }

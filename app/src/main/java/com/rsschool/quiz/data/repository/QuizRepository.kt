@@ -10,18 +10,10 @@ class QuizRepository : IRepository {
     override fun keepUserAnswer(answer: Pair<Int, Int>) {
         storage.userAnswerIds.apply {
             answer.apply {
-                if (getOrNull(first) != null) {
-                    set(first, second)
-                } else {
-                    add(first, second)
-                }
+                set(first, second)
             }
             Log.d("ANSWERS", "Answers is $this")
         }
-    }
-
-    override fun forgotUserAnswer() {
-        storage.userAnswerIds.removeLast()
     }
 
     override fun getQuestionById(questionId: Int) = storage.questions[questionId - 1]
