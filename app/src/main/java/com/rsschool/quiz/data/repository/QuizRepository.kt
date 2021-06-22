@@ -24,4 +24,12 @@ class QuizRepository : IRepository {
     override fun getAnswers() = storage.userAnswerIds
 
     override fun getQuestions() = storage.questions
+
+    override fun resetAnswers() {
+        storage.userAnswerIds.apply {
+            forEachIndexed { index, _ ->
+                set(index, -1)
+            }
+        }
+    }
 }

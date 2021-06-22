@@ -9,7 +9,10 @@ import androidx.core.view.isVisible
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.ActivityMainBinding
 import com.rsschool.quiz.ui.pager.OnCurrentFragmentListener
+import com.rsschool.quiz.ui.pager.PagerFragment
 import com.rsschool.quiz.ui.pager.PagerPresenter
+import com.rsschool.quiz.ui.result.OnResultPageButtonsClickListener
+import com.rsschool.quiz.ui.result.ResultPresenter
 import com.rsschool.quiz.utils.*
 import java.util.*
 
@@ -21,6 +24,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private var _pagerPresenter: PagerPresenter? = null
     private val pagerPresenter get() = _pagerPresenter
+
+    private var _resultPresenter: ResultPresenter? = null
+    private val resultPresenter get() = _resultPresenter
 
     private var currentFragmentId = 1
 
@@ -37,9 +43,20 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     private fun setViews() {
+        mainPresenter.initNewInstanceOfPager()
         setOnNavigationIconClickListener()
         setOnNextQuestionClick()
         setOnPreviousQuestionClick()
+    }
+
+    override fun setNewInstanceOfPager() {
+        supportFragmentManager.beginTransaction().apply {
+            supportFragmentManager.popBackStack()
+            binding?.fragmentContainer?.id?.let { containerId ->
+                replace(containerId, PagerFragment())
+            }
+            commit()
+        }
     }
 
     override fun setOnNavigationIconClickListener() {
@@ -56,6 +73,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun setPagerPresenter(pagerPresenter: PagerPresenter) {
         _pagerPresenter = pagerPresenter
         setViewsByCurrentFragment()
+    }
+
+    override fun setResultPresenter(resultPresenter: ResultPresenter) {
+        _resultPresenter = resultPresenter
+        mainPresenter.listenClicksFromResultPage()
     }
 
     override fun setOnChangePageListener(listener: OnChangePageListener) {
@@ -130,6 +152,22 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
+    override fun setOnClicksFromResultPage() {
+        resultPresenter?.setOnResultButtonsClickListener(
+            object : OnResultPageButtonsClickListener {
+                override fun onRepeatButtonClick() {
+                    mainPresenter.initNewInstanceOfPager()
+                    resetQuiz()
+                }
+
+                override fun onExitButtonClick() {
+                    mainPresenter.exitFromQuizApp()
+                }
+            })
+    }
+
+    override fun closeMainActivity() = finishAffinity()
+
     private fun Toolbar.setAccessMode(mode: String) {
         navigationIcon = ContextCompat.getDrawable(
             context,
@@ -158,10 +196,27 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private fun Button.setButtonActionName(name: String) {
         this.text = getStringResource(
-            if (name == SUBMIT)
-                R.string.button_submit_answers
-            else
-                R.string.button_next_question
+            if (name == SUBMIT) R.string.button_submit_answers else R.string.button_next_question
         )
+    }
+
+    private fun resetQuiz() {
+        mainPresenter.resetAnswerList()
+
+        binding?.apply {
+
+            appBarLayout.isVisible = true
+
+            previousButton.let {
+                it.isEnabled = false
+                it.isVisible = true
+            }
+
+            nextButton.let {
+                it.text = getStringResource(R.string.button_next_question)
+                it.isEnabled = false
+                it.isVisible = true
+            }
+        }
     }
 }

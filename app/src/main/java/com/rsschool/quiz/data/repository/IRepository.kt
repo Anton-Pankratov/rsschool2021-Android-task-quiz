@@ -13,4 +13,6 @@ interface IRepository {
     fun getAnswers(): MutableList<Int>
 
     fun getQuestions(): List<QuestionEntity>
+
+    fun resetAnswers()
 }

@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentResultBinding
 import com.rsschool.quiz.ui.base.BaseFragment
-import com.rsschool.quiz.ui.base.BasePresenter
+import com.rsschool.quiz.ui.main.MainActivity
+import com.rsschool.quiz.utils.getStringResource
 
 class ResultFragment : BaseFragment<FragmentResultBinding>(), ResultContract.View {
 
@@ -19,7 +19,9 @@ class ResultFragment : BaseFragment<FragmentResultBinding>(), ResultContract.Vie
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.provideResultPresenter()
         showQuizResult()
+        setOnClicks()
     }
 
     override fun showQuizResult() {
@@ -30,17 +32,36 @@ class ResultFragment : BaseFragment<FragmentResultBinding>(), ResultContract.Vie
             )
     }
 
+    private fun setOnClicks() {
+        setOnShareClick()
+        setOnRepeatClick()
+        setOnExitClick()
+    }
+
     override fun setOnShareClick() {
-        TODO("Not yet implemented")
+        binding.buttonShare.setOnClickListener {
+            presenter.shareResult()
+        }
     }
 
     override fun setOnRepeatClick() {
-        TODO("Not yet implemented")
+        binding.buttonRepeat.setOnClickListener {
+            presenter.listenOnRepeatButtonClick()
+        }
     }
 
     override fun setOnExitClick() {
-        TODO("Not yet implemented")
+        binding.buttonExit.setOnClickListener {
+            presenter.listenOnExitButtonClick()
+        }
     }
 
+    override fun takeContextForSharing() = requireContext()
 
+    override fun setSharedResultText() =
+        requireContext().getStringResource(R.string.sharing_result_score)
+
+    override fun setResultPresenterInActivity() {
+        (activity as MainActivity).setResultPresenter(presenter)
+    }
 }

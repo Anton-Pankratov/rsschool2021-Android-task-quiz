@@ -10,6 +10,10 @@ class MainPresenter(private val view: MainContract.View) : BasePresenter(), Main
 
     init { initRepository() }
 
+    override fun initNewInstanceOfPager() {
+        view.setNewInstanceOfPager()
+    }
+
     override fun listenOnNavigationIconClick() {
         view.setOnNavigationIconClickListener()
     }
@@ -41,5 +45,17 @@ class MainPresenter(private val view: MainContract.View) : BasePresenter(), Main
 
     override fun makeViewsInvisibleOnResultPage() {
         view.setViewsInvisibleOnResultPage()
+    }
+
+    override fun listenClicksFromResultPage() {
+        view.setOnClicksFromResultPage()
+    }
+
+    override fun exitFromQuizApp() {
+        view.closeMainActivity()
+    }
+
+    override fun resetAnswerList() {
+        repository?.resetAnswers()
     }
 }
