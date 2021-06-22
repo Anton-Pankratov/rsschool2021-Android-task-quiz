@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.content.ContextCompat
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.main.MainActivity
+import com.rsschool.quiz.utils.toDp
 
 class QuestionFragment(private var questionId: Int = 0) : BaseFragment<FragmentQuestionBinding>(),
     QuestionContract.View {
@@ -48,14 +50,23 @@ class QuestionFragment(private var questionId: Int = 0) : BaseFragment<FragmentQ
             variants.forEach {
                 addView(AppCompatRadioButton(requireContext())
                     .apply {
-                        id = btnId++
-                        text = it
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        ).apply {
+                            setMargins(0,context.toDp(20),0, 0)
+                        }
                         buttonTintList =
                             ColorStateList.valueOf(
-                                ContextCompat.getColor(context,
-                                    presenter.passQuestionFragmentTheme(questionId))
+                                ContextCompat.getColor(
+                                    context,
+                                    presenter.passQuestionFragmentTheme(questionId)
+                                )
                             )
-                        setPadding(10, 0, 0,0)
+                        setPadding(context.toDp(10), 0, 0, 0)
+                        text = it
+                        textSize = 16f
+                        id = btnId++
                     })
             }
         }

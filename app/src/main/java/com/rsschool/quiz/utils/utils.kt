@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import com.rsschool.quiz.R
+import kotlin.math.roundToInt
 
 const val ENABLED = "enabled"
 const val DISABLED = "disabled"
@@ -19,6 +20,10 @@ const val ANIMATION_DURATION = 360
 
 fun Context.getStringResource(@StringRes resId: Int) =
     this.resources.getString(resId)
+
+fun Context.toDp(value: Int): Int {
+    return (value * resources.displayMetrics.density + 0.5f).roundToInt()
+}
 
 fun View.setNewBackground(@ColorRes previousColor: Int, @ColorRes color: Int) {
     background = TransitionDrawable(
