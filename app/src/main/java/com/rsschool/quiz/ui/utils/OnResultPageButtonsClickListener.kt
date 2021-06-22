@@ -1,4 +1,4 @@
-package com.rsschool.quiz.ui.result
+package com.rsschool.quiz.ui.utils
 
 interface OnResultPageButtonsClickListener {
 

@@ -1,7 +1,6 @@
 package com.rsschool.quiz.ui.question
 
-import com.rsschool.quiz.data.repository.IRepository
-import com.rsschool.quiz.data.repository.QuizRepository
+import com.rsschool.quiz.ui.utils.provideTheme
 import com.rsschool.quiz.ui.base.BasePresenter
 
 class QuestionPresenter(val view: QuestionContract.View)
@@ -20,7 +19,14 @@ class QuestionPresenter(val view: QuestionContract.View)
         repository?.keepUserAnswer(answerId)
     }
 
+    override fun passAnswerNotSelectedSignal() {
+        view.setAnswerNotSelectedSignal()
+    }
+
     override fun passAnswerSelectedSignal() {
         view.setAnswerSelectedSignal()
     }
+
+    override fun passQuestionFragmentTheme(questionId: Int) =
+        questionId.provideTheme()
 }

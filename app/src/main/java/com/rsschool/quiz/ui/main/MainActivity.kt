@@ -3,17 +3,16 @@ package com.rsschool.quiz.ui.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.annotation.ColorRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.rsschool.quiz.R
+import com.rsschool.quiz.*
 import com.rsschool.quiz.databinding.ActivityMainBinding
-import com.rsschool.quiz.ui.pager.OnCurrentFragmentListener
 import com.rsschool.quiz.ui.pager.PagerFragment
 import com.rsschool.quiz.ui.pager.PagerPresenter
-import com.rsschool.quiz.ui.result.OnResultPageButtonsClickListener
 import com.rsschool.quiz.ui.result.ResultPresenter
-import com.rsschool.quiz.utils.*
+import com.rsschool.quiz.ui.utils.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), MainContract.View {
@@ -29,6 +28,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val resultPresenter get() = _resultPresenter
 
     private var currentFragmentId = 1
+
+    private var lastKeepColor = Colors.DEFAULT.resId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,16 +50,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setOnPreviousQuestionClick()
     }
 
-    override fun setNewInstanceOfPager() {
-        supportFragmentManager.beginTransaction().apply {
-            supportFragmentManager.popBackStack()
-            binding?.fragmentContainer?.id?.let { containerId ->
-                replace(containerId, PagerFragment())
-            }
-            commit()
-        }
-    }
-
     override fun setOnNavigationIconClickListener() {
         binding?.toolbar?.apply {
             setSupportActionBar(this)
@@ -68,20 +59,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 }
             }
         }
-    }
-
-    override fun setPagerPresenter(pagerPresenter: PagerPresenter) {
-        _pagerPresenter = pagerPresenter
-        setViewsByCurrentFragment()
-    }
-
-    override fun setResultPresenter(resultPresenter: ResultPresenter) {
-        _resultPresenter = resultPresenter
-        mainPresenter.listenClicksFromResultPage()
-    }
-
-    override fun setOnChangePageListener(listener: OnChangePageListener) {
-        mainPresenter.initOnChangePageListener(listener)
     }
 
     override fun showNextQuestionPage() {
@@ -95,16 +72,23 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainPresenter.setOnChangePageAction(PREVIOUS)
     }
 
-    private fun setOnNextQuestionClick() {
-        binding?.nextButton?.setOnClickListener {
-            mainPresenter.listenOnNextQuestionClick()
-        }
+    override fun setViewsByCurrentFragment() {
+        pagerPresenter?.initOnCurrentFragmentListener(object : OnCurrentFragmentListener {
+            override fun onCurrentFragment(questionId: Int) {
+                val answers = mainPresenter.getAnswersList()
+                if (!answers.isNullOrEmpty()) {
+                    if (questionId <= answers.size.minus(1)) {
+                        currentFragmentId = questionId.also {
+                            it.setViewsByCurrentQuestionWith(answers)
+                        }
+                    } else mainPresenter.makeViewsInvisibleOnResultPage()
+                }
+            }
+        })
     }
 
-    private fun setOnPreviousQuestionClick() {
-        binding?.previousButton?.setOnClickListener {
-            mainPresenter.listenOnPreviousQuestionClick()
-        }
+    override fun setSignalAboutAnswerNotSelected() {
+        binding?.nextButton?.isEnabled = false
     }
 
     override fun setSignalAboutAnswerSelected() {
@@ -113,42 +97,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
-    override fun setViewsByCurrentFragment() {
-        pagerPresenter?.initOnCurrentFragmentListener(object : OnCurrentFragmentListener {
-            override fun onCurrentFragment(questionId: Int) {
-                val questions = mainPresenter.getAnswersList()
-                if (!questions.isNullOrEmpty()) {
-                    if (questionId <= questions.size.minus(1)) {
-                        currentFragmentId = questionId
-
-                        binding?.apply {
-
-                            toolbar.setQuestionNumber(questionId)
-                            nextButton.setAccessModeBy { questions[questionId] != -1 }
-
-                            if (questionId == 0) {
-                                previousButton.setAccessMode(DISABLED)
-                                toolbar.setAccessMode(DISABLED)
-                            } else {
-                                previousButton.setAccessMode(ENABLED)
-                                toolbar.setAccessMode(ENABLED)
-                                nextButton.setButtonActionName(
-                                    if (questionId == questions.size - 1)
-                                        SUBMIT else NEXT
-                                )
-                            }
-                        }
-                    } else mainPresenter.makeViewsInvisibleOnResultPage()
-                }
-            }
-        })
-    }
-
-    override fun setViewsInvisibleOnResultPage() {
+    override fun setSignalAboutChangeFragmentTheme(@ColorRes theme: Int) {
         binding?.apply {
-            appBarLayout.isVisible = false
-            nextButton.isVisible = false
-            previousButton.isVisible = false
+            arrayOf(previousButton, nextButton, toolbar).forEach {
+                it.setNewBackground(lastKeepColor, theme)
+            }
+            lastKeepColor = theme
         }
     }
 
@@ -166,7 +120,71 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             })
     }
 
-    override fun closeMainActivity() = finishAffinity()
+    override fun setViewsInvisibleOnResultPage() {
+        binding?.apply {
+            appBarLayout.isVisible = false
+            nextButton.isVisible = false
+            previousButton.isVisible = false
+        }
+    }
+
+    override fun setOnChangePageListener(listener: OnChangePageListener) {
+        mainPresenter.initOnChangePageListener(listener)
+    }
+
+    override fun setPagerPresenter(pagerPresenter: PagerPresenter) {
+        _pagerPresenter = pagerPresenter
+        setViewsByCurrentFragment()
+    }
+
+    override fun setResultPresenter(resultPresenter: ResultPresenter) {
+        _resultPresenter = resultPresenter
+        mainPresenter.listenClicksFromResultPage()
+    }
+
+    override fun setNewInstanceOfPager() {
+        supportFragmentManager.beginTransaction().apply {
+            supportFragmentManager.popBackStack()
+            binding?.fragmentContainer?.id?.let { containerId ->
+                replace(containerId, PagerFragment())
+            }
+            commit()
+        }
+    }
+
+    override fun closeMainActivity() = finishAndRemoveTask()
+
+    private fun setOnNextQuestionClick() {
+        binding?.nextButton?.setOnClickListener {
+            mainPresenter.listenOnNextQuestionClick()
+        }
+    }
+
+    private fun setOnPreviousQuestionClick() {
+        binding?.previousButton?.setOnClickListener {
+            mainPresenter.listenOnPreviousQuestionClick()
+        }
+    }
+
+    private fun Int.setViewsByCurrentQuestionWith(answers: List<Int>) {
+        binding?.apply {
+            val questionId = this@setViewsByCurrentQuestionWith
+            toolbar.setQuestionNumber(questionId)
+            nextButton.setAccessModeBy { answers[questionId] != -1 }
+
+            if (questionId == 0) {
+                previousButton.setAccessMode(DISABLED)
+                toolbar.setAccessMode(DISABLED)
+            } else {
+                previousButton.setAccessMode(ENABLED)
+                toolbar.setAccessMode(ENABLED)
+                nextButton.setButtonActionName(
+                    if (questionId == answers.size - 1)
+                        SUBMIT else NEXT
+                )
+            }
+        }
+    }
 
     private fun Toolbar.setAccessMode(mode: String) {
         navigationIcon = ContextCompat.getDrawable(

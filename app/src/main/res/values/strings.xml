@@ -8,6 +8,6 @@
     <string name="button_submit_answers">Submit</string>
 
     <string name="result_title_total_score">Total score: %1s</string>
-    <string name="sharing_result_score">Congratulate me! I have earned %1s points in Quiz )))</string>
+    <string name="sharing_result_score">Congratulate me! I have earned %1s points in Quiz.%2s</string>
 
 </resources>

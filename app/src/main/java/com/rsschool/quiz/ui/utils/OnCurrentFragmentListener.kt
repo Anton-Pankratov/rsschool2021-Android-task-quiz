@@ -1,4 +1,4 @@
-package com.rsschool.quiz.ui.pager
+package com.rsschool.quiz.ui.utils
 
 interface OnCurrentFragmentListener {
 

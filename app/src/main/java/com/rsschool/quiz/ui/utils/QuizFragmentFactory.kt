@@ -1,4 +1,4 @@
-package com.rsschool.quiz.ui.pager
+package com.rsschool.quiz.ui.utils
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory

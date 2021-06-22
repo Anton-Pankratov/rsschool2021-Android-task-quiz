@@ -1,6 +1,7 @@
 package com.rsschool.quiz.ui.result
 
 import android.content.Context
+import com.rsschool.quiz.ui.utils.OnResultPageButtonsClickListener
 
 interface ResultContract {
 
@@ -9,17 +10,19 @@ interface ResultContract {
         fun setOnShareClick()
         fun setOnRepeatClick()
         fun setOnExitClick()
-        fun setSharedResultText(): String
+        fun passSharedResultText(): String
         fun takeContextForSharing(): Context
         fun setResultPresenterInActivity()
     }
 
     interface Presenter {
-        fun calculateResult(): Int
         fun shareResult()
-        fun setOnResultButtonsClickListener(listener: OnResultPageButtonsClickListener)
         fun listenOnRepeatButtonClick()
         fun listenOnExitButtonClick()
+        fun setOnResultButtonsClickListener(
+            listener: OnResultPageButtonsClickListener
+        )
+        fun calculateResult(): Int
         fun provideResultPresenter()
     }
 }

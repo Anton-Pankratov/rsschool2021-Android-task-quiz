@@ -1,4 +1,4 @@
-package com.rsschool.quiz.ui.main
+package com.rsschool.quiz.ui.utils
 
 interface OnChangePageListener {
 

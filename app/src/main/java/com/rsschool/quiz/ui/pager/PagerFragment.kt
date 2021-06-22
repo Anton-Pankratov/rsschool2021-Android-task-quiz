@@ -5,18 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
+import com.rsschool.quiz.ui.utils.NEXT
+import com.rsschool.quiz.ui.utils.PREVIOUS
+import com.rsschool.quiz.ui.utils.SUBMIT
 import com.rsschool.quiz.databinding.FragmentPagerBinding
 import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.main.MainActivity
-import com.rsschool.quiz.ui.main.OnChangePageListener
-import com.rsschool.quiz.utils.NEXT
-import com.rsschool.quiz.utils.PREVIOUS
-import com.rsschool.quiz.utils.SUBMIT
+import com.rsschool.quiz.ui.utils.OnChangePageListener
+import com.rsschool.quiz.ui.utils.QuizFragmentFactory
 
 class PagerFragment : BaseFragment<FragmentPagerBinding>(), PagerContract.View {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPagerBinding
-        get() = FragmentPagerBinding::inflate
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean)
+        -> FragmentPagerBinding
+            get() = FragmentPagerBinding::inflate
 
     override val presenter = PagerPresenter(this)
 
@@ -53,21 +55,21 @@ class PagerFragment : BaseFragment<FragmentPagerBinding>(), PagerContract.View {
         })
     }
 
-    override fun setPagerPresenterInActivity() {
-        (activity as MainActivity).setPagerPresenter(presenter)
-    }
-
     override fun setChangePageAction() {
         (activity as MainActivity).setOnChangePageListener(object : OnChangePageListener {
             override fun onChangePage(action: String) {
                 binding.pager.apply {
                     when (action) {
                         NEXT -> currentItem += 1
-                        PREVIOUS ->  currentItem -= 1
+                        PREVIOUS -> currentItem -= 1
                         SUBMIT -> currentItem = fragmentsCount - 1
                     }
                 }
             }
         })
+    }
+
+    override fun setPagerPresenterInActivity() {
+        (activity as MainActivity).setPagerPresenter(presenter)
     }
 }

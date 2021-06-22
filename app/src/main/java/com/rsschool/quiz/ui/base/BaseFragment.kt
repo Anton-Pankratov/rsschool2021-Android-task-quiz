@@ -11,7 +11,7 @@ import androidx.viewbinding.ViewBinding
  * Thanks "https://chetangupta.net/viewbinding/" for this solution
  */
 
-abstract class BaseFragment<VB: ViewBinding> : Fragment() {
+abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
