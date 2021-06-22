@@ -1,9 +1,9 @@
 package com.rsschool.quiz.ui.main
 
 import com.rsschool.quiz.ui.base.BasePresenter
-import com.rsschool.quiz.ui.utils.OnCurrentFragmentListener
+import com.rsschool.quiz.utils.OnCurrentFragmentListener
 import com.rsschool.quiz.ui.pager.PagerPresenter
-import com.rsschool.quiz.ui.utils.OnChangePageListener
+import com.rsschool.quiz.utils.OnChangePageListener
 
 class MainPresenter(private val view: MainContract.View) : BasePresenter(), MainContract.Presenter {
 

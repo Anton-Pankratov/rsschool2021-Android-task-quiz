@@ -1,6 +1,6 @@
 package com.rsschool.quiz.ui.question
 
-import com.rsschool.quiz.ui.utils.provideTheme
+import com.rsschool.quiz.utils.provideTheme
 import com.rsschool.quiz.ui.base.BasePresenter
 
 class QuestionPresenter(val view: QuestionContract.View)

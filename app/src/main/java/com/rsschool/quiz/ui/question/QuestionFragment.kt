@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.main.MainActivity
-import com.rsschool.quiz.ui.utils.setAlphaAnimation
 
 class QuestionFragment(private var questionId: Int = 0) : BaseFragment<FragmentQuestionBinding>(),
     QuestionContract.View {

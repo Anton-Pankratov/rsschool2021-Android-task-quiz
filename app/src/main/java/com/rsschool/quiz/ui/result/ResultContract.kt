@@ -1,7 +1,7 @@
 package com.rsschool.quiz.ui.result
 
 import android.content.Context
-import com.rsschool.quiz.ui.utils.OnResultPageButtonsClickListener
+import com.rsschool.quiz.utils.OnResultPageButtonsClickListener
 
 interface ResultContract {
 

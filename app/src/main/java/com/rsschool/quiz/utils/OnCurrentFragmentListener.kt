@@ -1,4 +1,4 @@
-package com.rsschool.quiz.ui.utils
+package com.rsschool.quiz.utils
 
 interface OnCurrentFragmentListener {
 

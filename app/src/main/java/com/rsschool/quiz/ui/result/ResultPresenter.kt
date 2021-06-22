@@ -3,7 +3,7 @@ package com.rsschool.quiz.ui.result
 import android.content.Intent
 import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BasePresenter
-import com.rsschool.quiz.ui.utils.OnResultPageButtonsClickListener
+import com.rsschool.quiz.utils.OnResultPageButtonsClickListener
 import java.lang.StringBuilder
 
 class ResultPresenter(val view: ResultContract.View) : BasePresenter(), ResultContract.Presenter {

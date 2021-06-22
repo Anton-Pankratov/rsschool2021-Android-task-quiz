@@ -5,14 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.rsschool.quiz.ui.utils.NEXT
-import com.rsschool.quiz.ui.utils.PREVIOUS
-import com.rsschool.quiz.ui.utils.SUBMIT
+import com.rsschool.quiz.utils.NEXT
+import com.rsschool.quiz.utils.PREVIOUS
+import com.rsschool.quiz.utils.SUBMIT
 import com.rsschool.quiz.databinding.FragmentPagerBinding
 import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.main.MainActivity
-import com.rsschool.quiz.ui.utils.OnChangePageListener
-import com.rsschool.quiz.ui.utils.QuizFragmentFactory
+import com.rsschool.quiz.utils.OnChangePageListener
+import com.rsschool.quiz.utils.QuizFragmentFactory
 
 class PagerFragment : BaseFragment<FragmentPagerBinding>(), PagerContract.View {
 
