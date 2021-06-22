@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentResultBinding
-import com.rsschool.quiz.ui.utils.getStringResource
+import com.rsschool.quiz.utils.getStringResource
 import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.main.MainActivity
-import com.rsschool.quiz.ui.utils.setAlphaAnimation
+import com.rsschool.quiz.utils.setAlphaAnimation
 
 class ResultFragment : BaseFragment<FragmentResultBinding>(), ResultContract.View {
 

@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import com.rsschool.quiz.ui.base.BasePresenter
 import com.rsschool.quiz.ui.question.QuestionFragment
 import com.rsschool.quiz.ui.result.ResultFragment
-import com.rsschool.quiz.ui.utils.OnCurrentFragmentListener
+import com.rsschool.quiz.utils.OnCurrentFragmentListener
 
 class PagerPresenter(private val view: PagerContract.View)
     : BasePresenter(), PagerContract.Presenter {

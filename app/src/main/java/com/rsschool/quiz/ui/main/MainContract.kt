@@ -1,10 +1,10 @@
 package com.rsschool.quiz.ui.main
 
 import androidx.annotation.ColorRes
-import com.rsschool.quiz.ui.utils.OnCurrentFragmentListener
+import com.rsschool.quiz.utils.OnCurrentFragmentListener
 import com.rsschool.quiz.ui.pager.PagerPresenter
 import com.rsschool.quiz.ui.result.ResultPresenter
-import com.rsschool.quiz.ui.utils.OnChangePageListener
+import com.rsschool.quiz.utils.OnChangePageListener
 
 interface MainContract {
 

@@ -12,7 +12,7 @@ import com.rsschool.quiz.databinding.ActivityMainBinding
 import com.rsschool.quiz.ui.pager.PagerFragment
 import com.rsschool.quiz.ui.pager.PagerPresenter
 import com.rsschool.quiz.ui.result.ResultPresenter
-import com.rsschool.quiz.ui.utils.*
+import com.rsschool.quiz.utils.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), MainContract.View {
