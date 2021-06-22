@@ -22,13 +22,22 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    viewBinding {
+        enabled true
+    }
 }
 
 dependencies {
 
+    /** Kotlin */
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "androidx.core:core-ktx:$kotlin_version"
+
+    /** Platform Utility*/
+    implementation "androidx.appcompat:appcompat:$app_compat"
+
+    /** Design */
+    implementation "com.google.android.material:material:$material_design"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
 }
