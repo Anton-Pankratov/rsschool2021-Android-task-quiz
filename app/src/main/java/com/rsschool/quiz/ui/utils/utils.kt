@@ -12,8 +12,6 @@ import androidx.core.graphics.drawable.toDrawable
 import com.rsschool.quiz.R
 import kotlin.math.roundToInt
 
-const val ENABLED = "enabled"
-const val DISABLED = "disabled"
 const val NEXT = "next_fragment"
 const val PREVIOUS = "previous_fragment"
 const val SUBMIT = "submit_answers"

@@ -3,6 +3,8 @@ package com.rsschool.quiz.ui.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rsschool.quiz.databinding.ActivityMainBinding
+import com.rsschool.quiz.ui.utils.NEXT
+import com.rsschool.quiz.ui.utils.PREVIOUS
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
@@ -17,7 +19,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setContentView(binding.root)
         setPresenter()
 
-        presenter?.onSetViewPager()
+        presenter?.apply {
+            onSetViewPager()
+            listenQuestionAction()
+        }
     }
 
     override fun setPresenter() {
@@ -29,8 +34,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun setFragmentsPager() {
         binding.pager.apply {
             presenter.let {
-                // isUserInputEnabled = false
+                isUserInputEnabled = false
                 adapter = it?.onCreatePagerAdapter(this@MainActivity)
+            }
+        }
+    }
+
+    override fun setQuestionAction(action: String) {
+        binding.pager.apply {
+            when (action) {
+                PREVIOUS -> currentItem -= 1
+                NEXT -> currentItem += 1
             }
         }
     }

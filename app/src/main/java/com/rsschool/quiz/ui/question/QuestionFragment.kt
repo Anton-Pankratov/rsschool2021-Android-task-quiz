@@ -33,14 +33,21 @@ class QuestionFragment(private val questionId: Int = 1) :
         super.onViewCreated(view, savedInstanceState)
 
         presenter.apply {
-            onConfigureToolbar(questionId)
-            formQuestionTitle()
-            onSetAnswerVariants()
-            configureButtons()
+            questionId.apply {
+                onConfigureToolbar(this)
+                formQuestionTitle(this)
+                onSetAnswerVariants()
+                onListenAnswerSelecting()
+                configureButtons()
+                listenOnNextClick()
+                listenOnPreviousClick()
+            }
         }
     }
 
     override fun checkCurrentQuestionId() = questionId
+
+    override fun providePresenter() = presenter
 
     override fun setToolbarTitle(questionId: Int) {
         binding.toolbar.apply {
@@ -57,7 +64,7 @@ class QuestionFragment(private val questionId: Int = 1) :
             (activity as AppCompatActivity).setSupportActionBar(this)
             if (questionId != 1) {
                 setNavigationOnClickListener {
-
+                    presenter.onShowPreviousFragment()
                 }
             } else {
                 navigationIcon = null
@@ -79,9 +86,14 @@ class QuestionFragment(private val questionId: Int = 1) :
         }
     }
 
-    override fun setPreviousQuestionAccessMode() {
-        binding.previousBtn.setAccessModeBy { questionId != 1 }
+    override fun setOnSelectedAnswerListener() {
+        binding.apply {
+            answersVariantsRg.setOnCheckedChangeListener { group, checkedId ->
+                nextBtn.isEnabled = true
+            }
+        }
     }
+
 
     override fun setNextQuestionAccessMode() {
         binding.apply {
@@ -97,6 +109,26 @@ class QuestionFragment(private val questionId: Int = 1) :
                 NEXT -> requireContext().getStringResource(R.string.button_next_question)
                 else -> requireContext().getStringResource(R.string.button_submit_answers)
             }
+    }
+
+    override fun setPreviousQuestionAccessMode() {
+        binding.previousBtn.setAccessModeBy { questionId != 1 }
+    }
+
+    override fun setOnNextButtonClickListener() {
+        binding.apply {
+            nextBtn.setOnClickListener {
+                presenter.onShowNextFragment()
+            }
+        }
+    }
+
+    override fun setOnPreviousButtonClickListener() {
+        binding.apply {
+            previousBtn.setOnClickListener {
+                presenter.onShowPreviousFragment()
+            }
+        }
     }
 
     private fun Button.setAccessModeBy(predicate: () -> Boolean) {

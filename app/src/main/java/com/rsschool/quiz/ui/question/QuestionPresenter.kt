@@ -17,8 +17,11 @@ import com.rsschool.quiz.ui.utils.toDp
 class QuestionPresenter(private val view: QuestionContract.View) :
     BasePresenter(), QuestionContract.Presenter {
 
-    private var _currentQuestion: QuestionEntity? = null
-    private val currentQuestion get() = _currentQuestion
+    private var _questionButtonListener:
+            QuestionContract.OnQuestionButtonListener? = null
+
+    private val questionButtonListener
+        get() = _questionButtonListener
 
     override fun onConfigureToolbar(questionId: Int) {
         view.apply {
@@ -34,8 +37,8 @@ class QuestionPresenter(private val view: QuestionContract.View) :
     override fun getThemeByQuestionId(questionId: Int) =
         questionId.provideTheme()
 
-    override fun formQuestionTitle() {
-        view.setQuestionTitle(currentQuestion?.title)
+    override fun formQuestionTitle(questionId: Int) {
+        view.setQuestionTitle(getQuestionById(questionId)?.title)
     }
 
     override fun onSetAnswerVariants() {
@@ -65,13 +68,16 @@ class QuestionPresenter(private val view: QuestionContract.View) :
         layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            setMargins(0, context.toDp(20), 0, 0)
-        }
-        setPadding(context.toDp(10), 0, 0, 0)
+        )
+        val padding = context.toDp(20)
+        setPadding(padding, padding, padding, padding)
         text = answerText
-        textSize = 16f
+        textSize = 20f
         id = answerId
+    }
+
+    override fun onListenAnswerSelecting() {
+        view.setOnSelectedAnswerListener()
     }
 
     override fun configureButtons() {
@@ -88,9 +94,30 @@ class QuestionPresenter(private val view: QuestionContract.View) :
         }
     }
 
+    override fun setOnQuestionButtonListener(
+        listener: QuestionContract.OnQuestionButtonListener
+    ) {
+        _questionButtonListener = listener
+    }
+
+    override fun listenOnNextClick() {
+        view.setOnNextButtonClickListener()
+    }
+
+    override fun listenOnPreviousClick() {
+        view.setOnPreviousButtonClickListener()
+    }
+
+    override fun onShowNextFragment() {
+        questionButtonListener?.onNext()
+    }
+
+    override fun onShowPreviousFragment() {
+        questionButtonListener?.onPrevious()
+    }
+
     override fun getQuestionById(questionId: Int) =
         repository?.getQuestions()?.get(questionId - 1)
-            .also { _currentQuestion = it }
 
     override fun getQuestionSize(): Int? =
         repository?.getQuestionsCount()

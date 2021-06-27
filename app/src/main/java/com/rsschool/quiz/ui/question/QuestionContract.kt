@@ -11,29 +11,68 @@ interface QuestionContract {
 
     interface View {
         fun checkCurrentQuestionId(): Int
+        fun providePresenter(): Presenter
+
+        /** Toolbar */
         fun setToolbarTitle(questionId: Int)
         fun setNavigationBackAction(questionId: Int)
+
+        /** Theme */
         fun setFragmentTheme(@StyleRes theme: Int)
+
+        /** Question Views */
         fun setQuestionTitle(title: String?)
         fun setAnswerVariants()
-        fun setPreviousQuestionAccessMode()
+        fun setOnSelectedAnswerListener()
+
+        /** Button's View Sets */
         fun setNextQuestionAccessMode()
         fun setNextQuestionButtonText()
+        fun setPreviousQuestionAccessMode()
+
+        /** Button's Clicks */
+        fun setOnNextButtonClickListener()
+        fun setOnPreviousButtonClickListener()
     }
 
     interface Presenter : BaseContract.Presenter {
+
+        /** Toolbar */
         fun onConfigureToolbar(questionId: Int)
+
+        /** Theme */
         fun onSetCreatedFragmentTheme(questionId: Int)
         fun getThemeByQuestionId(questionId: Int): Int
-        fun formQuestionTitle()
+
+        /** Question Views */
+        fun formQuestionTitle(questionId: Int)
         fun onSetAnswerVariants()
         fun generateAnswersViews(radioGroup: RadioGroup, questionId: Int)
         fun createAnswerVariantView(
             context: Context, answerText: String, answerId: Int
         ): MaterialRadioButton
+        fun onListenAnswerSelecting()
+
+        /** Buttons's View Sets */
         fun configureButtons()
         fun getNextQuestionButtonMode(): String
+
+        /** Button's Clicks */
+        fun setOnQuestionButtonListener(
+            listener: OnQuestionButtonListener
+        )
+        fun listenOnNextClick()
+        fun listenOnPreviousClick()
+        fun onShowNextFragment()
+        fun onShowPreviousFragment()
+
+        /** Question From Store */
         fun getQuestionById(questionId: Int): QuestionEntity?
         fun getQuestionSize(): Int?
+    }
+
+    interface OnQuestionButtonListener {
+        fun onPrevious()
+        fun onNext()
     }
 }
