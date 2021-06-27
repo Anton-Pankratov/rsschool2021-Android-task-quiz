@@ -1,18 +1,15 @@
 package com.rsschool.quiz.ui.base
 
-import com.rsschool.quiz.data.repository.IRepository
-import com.rsschool.quiz.data.repository.QuizRepository
-
 abstract class BasePresenter {
 
-    val repository: IRepository?
+    val repository: com.rsschool.quiz.data.repository.IRepository?
         get() = _repository
 
     fun initRepository() {
-        _repository = QuizRepository()
+        _repository = com.rsschool.quiz.data.repository.QuizRepository()
     }
 
     companion object {
-        private var _repository: IRepository? = null
+        private var _repository: com.rsschool.quiz.data.repository.IRepository? = null
     }
 }

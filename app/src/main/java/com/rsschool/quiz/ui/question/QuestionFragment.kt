@@ -1,104 +1,105 @@
 package com.rsschool.quiz.ui.question
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatRadioButton
-import androidx.core.content.ContextCompat
+import android.widget.Button
+import androidx.annotation.StyleRes
+import androidx.appcompat.app.AppCompatActivity
+import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 import com.rsschool.quiz.ui.base.BaseFragment
-import com.rsschool.quiz.ui.main.MainActivity
-import com.rsschool.quiz.utils.toDp
+import com.rsschool.quiz.ui.utils.NEXT
+import com.rsschool.quiz.ui.utils.getStringResource
 
-class QuestionFragment(private var questionId: Int = 0) : BaseFragment<FragmentQuestionBinding>(),
+class QuestionFragment(private val questionId: Int = 1) :
+    BaseFragment<FragmentQuestionBinding, QuestionContract.Presenter>(),
     QuestionContract.View {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean)
     -> FragmentQuestionBinding
         get() = FragmentQuestionBinding::inflate
 
-    override val presenter = QuestionPresenter(this)
+    override val presenter: QuestionContract.Presenter
+        get() = QuestionPresenter(this)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        presenter.onSetCreatedFragmentTheme(questionId)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkUserAnswerSelect()
+
         presenter.apply {
-            questionId.also {
-                onSetQuestionParams(
-                    questionId = it
-                )
+            onConfigureToolbar(questionId)
+            formQuestionTitle()
+            onSetAnswerVariants()
+            configureButtons()
+        }
+    }
+
+    override fun checkCurrentQuestionId() = questionId
+
+    override fun setToolbarTitle(questionId: Int) {
+        binding.toolbar.apply {
+            title = String.format(
+                context.getStringResource(
+                    R.string.toolbar_title
+                ), questionId
+            )
+        }
+    }
+
+    override fun setNavigationBackAction(questionId: Int) {
+        binding.toolbar.apply {
+            (activity as AppCompatActivity).setSupportActionBar(this)
+            if (questionId != 1) {
+                setNavigationOnClickListener {
+
+                }
+            } else {
+                navigationIcon = null
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkUserAnswerNotSelect()
-        setQuestionFragmentTheme()
+    override fun setFragmentTheme(@StyleRes theme: Int) {
+        activity?.setTheme(theme)
     }
 
-    override fun showQuestionTitle(title: String) {
-        binding.titleQuestionTv.text = title
+    override fun setQuestionTitle(title: String?) {
+        binding.questionTitleTv.text = title
     }
 
-    override fun showAnswerVariants(variants: List<String>) {
-        binding.questionsRv.apply {
-            var btnId = 0
-            variants.forEach {
-                addView(AppCompatRadioButton(requireContext())
-                    .apply {
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        ).apply {
-                            setMargins(0,context.toDp(20),0, 0)
-                        }
-                        buttonTintList =
-                            ColorStateList.valueOf(
-                                ContextCompat.getColor(
-                                    context,
-                                    presenter.passQuestionFragmentTheme(questionId)
-                                )
-                            )
-                        setPadding(context.toDp(10), 0, 0, 0)
-                        text = it
-                        textSize = 16f
-                        id = btnId++
-                    })
+    override fun setAnswerVariants() {
+        binding.answersVariantsRg.apply {
+            presenter.generateAnswersViews(this, questionId)
+        }
+    }
+
+    override fun setPreviousQuestionAccessMode() {
+        binding.previousBtn.setAccessModeBy { questionId != 1 }
+    }
+
+    override fun setNextQuestionAccessMode() {
+        binding.apply {
+            nextBtn.setAccessModeBy {
+                answersVariantsRg.checkedRadioButtonId != -1
             }
         }
     }
 
-    override fun setAnswerNotSelectedSignal() {
-        (activity as MainActivity).setSignalAboutAnswerNotSelected()
-    }
-
-    override fun setAnswerSelectedSignal() {
-        (activity as MainActivity).setSignalAboutAnswerSelected()
-    }
-
-    override fun setQuestionFragmentTheme() {
-        presenter.passQuestionFragmentTheme(questionId).also {
-            (activity as MainActivity).setSignalAboutChangeFragmentTheme(it)
-
-        }
-    }
-
-    private fun checkUserAnswerNotSelect() {
-        if (binding.questionsRv.checkedRadioButtonId == -1) {
-            presenter.passAnswerNotSelectedSignal()
-        }
-    }
-
-    private fun checkUserAnswerSelect() {
-        binding.questionsRv.setOnCheckedChangeListener { _, checkedId ->
-            presenter.apply {
-                listenSelectedQuestion((questionId - 1) to checkedId)
-                passAnswerSelectedSignal()
+    override fun setNextQuestionButtonText() {
+        binding.nextBtn.text =
+            when (presenter.getNextQuestionButtonMode()) {
+                NEXT -> requireContext().getStringResource(R.string.button_next_question)
+                else -> requireContext().getStringResource(R.string.button_submit_answers)
             }
-        }
+    }
+
+    private fun Button.setAccessModeBy(predicate: () -> Boolean) {
+        isEnabled = predicate.invoke()
     }
 }

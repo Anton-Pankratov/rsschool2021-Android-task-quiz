@@ -1,45 +1,20 @@
 package com.rsschool.quiz.ui.main
 
-import androidx.annotation.ColorRes
-import com.rsschool.quiz.utils.OnCurrentFragmentListener
-import com.rsschool.quiz.ui.pager.PagerPresenter
-import com.rsschool.quiz.ui.result.ResultPresenter
-import com.rsschool.quiz.utils.OnChangePageListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.rsschool.quiz.ui.base.BaseContract
 
 interface MainContract {
 
     interface View {
-        fun setOnNavigationIconClickListener()
-        fun showNextQuestionPage()
-        fun showPreviousQuestionPage()
-        fun setViewsByCurrentFragment()
-        fun setSignalAboutAnswerNotSelected()
-        fun setSignalAboutAnswerSelected()
-        fun setSignalAboutChangeFragmentTheme(@ColorRes theme: Int)
-        fun setOnClicksFromResultPage()
-        fun setViewsInvisibleOnResultPage()
-        fun setOnChangePageListener(listener: OnChangePageListener)
-        fun setPagerPresenter(pagerPresenter: PagerPresenter)
-        fun setResultPresenter(resultPresenter: ResultPresenter)
-        fun setNewInstanceOfPager()
-        fun closeMainActivity()
+        fun setPresenter()
+        fun setFragmentsPager()
     }
 
-    interface Presenter {
-        fun listenOnNavigationIconClick()
-        fun listenOnNextQuestionClick()
-        fun listenOnPreviousQuestionClick()
-        fun makeViewsInvisibleOnResultPage()
-        fun setOnChangePageAction(action: String)
-        fun listenCurrentFragment(
-            pagerPresenter: PagerPresenter,
-            onCurrentFragmentListener: OnCurrentFragmentListener
-        )
-        fun initOnChangePageListener(listener: OnChangePageListener)
-        fun listenClicksFromResultPage()
-        fun getAnswersList(): List<Int>?
-        fun resetAnswerList()
-        fun initNewInstanceOfPager()
-        fun exitFromQuizApp()
+    interface Presenter : BaseContract.Presenter {
+        fun initFragmentFactory(fragmentManager: FragmentManager)
+        fun onSetViewPager()
+        fun onCreatePagerAdapter(activity: View): PagerAdapter
+        fun formFragments(): List<Fragment>
     }
 }

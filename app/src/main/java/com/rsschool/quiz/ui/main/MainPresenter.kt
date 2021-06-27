@@ -1,62 +1,40 @@
 package com.rsschool.quiz.ui.main
 
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.rsschool.quiz.ui.base.BasePresenter
-import com.rsschool.quiz.utils.OnCurrentFragmentListener
-import com.rsschool.quiz.ui.pager.PagerPresenter
-import com.rsschool.quiz.utils.OnChangePageListener
+import com.rsschool.quiz.ui.question.QuestionFragment
+import com.rsschool.quiz.ui.result.ResultFragment
+import com.rsschool.quiz.ui.utils.QuizFragmentFactory
 
 class MainPresenter(private val view: MainContract.View) : BasePresenter(), MainContract.Presenter {
 
-    private var onChangePageListener: OnChangePageListener? = null
-
     init { initRepository() }
 
-    override fun listenOnNavigationIconClick() {
-        view.setOnNavigationIconClickListener()
+    override fun initFragmentFactory(fragmentManager: FragmentManager) {
+        fragmentManager.fragmentFactory = QuizFragmentFactory
     }
 
-    override fun listenOnNextQuestionClick() {
-        view.showNextQuestionPage()
+    override fun onSetViewPager() {
+        view.setFragmentsPager()
     }
 
-    override fun listenOnPreviousQuestionClick() {
-        view.showPreviousQuestionPage()
+    override fun onCreatePagerAdapter(activity: MainContract.View): PagerAdapter {
+        return PagerAdapter(activity, formFragments())
     }
 
-    override fun makeViewsInvisibleOnResultPage() {
-        view.setViewsInvisibleOnResultPage()
-    }
-
-    override fun setOnChangePageAction(action: String) {
-        onChangePageListener?.onChangePage(action)
-    }
-
-    override fun listenCurrentFragment(
-        pagerPresenter: PagerPresenter,
-        onCurrentFragmentListener: OnCurrentFragmentListener
-    ) {
-        pagerPresenter.initOnCurrentFragmentListener(onCurrentFragmentListener)
-    }
-
-    override fun initOnChangePageListener(listener: OnChangePageListener) {
-        onChangePageListener = listener
-    }
-
-    override fun listenClicksFromResultPage() {
-        view.setOnClicksFromResultPage()
-    }
-
-    override fun getAnswersList() = repository?.getAnswers()?.toList()
-
-    override fun resetAnswerList() {
-        repository?.resetAnswers()
-    }
-
-    override fun initNewInstanceOfPager() {
-        view.setNewInstanceOfPager()
-    }
-
-    override fun exitFromQuizApp() {
-        view.closeMainActivity()
+    override fun formFragments(): List<Fragment> {
+        val fragments = mutableListOf<Fragment>()
+        repository?.getQuestionsCount().apply {
+            if (this != null) {
+                for (id in 1..this) {
+                    fragments.add(QuestionFragment(id))
+                    if (id == this) {
+                        fragments.add(ResultFragment())
+                    }
+                }
+            }
+        }
+        return fragments.toList()
     }
 }

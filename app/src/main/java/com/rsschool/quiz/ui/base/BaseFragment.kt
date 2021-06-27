@@ -7,20 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
-/**
- * Thanks "https://chetangupta.net/viewbinding/" for this solution
- */
-
-abstract class BaseFragment<VB : ViewBinding> : Fragment() {
+abstract class BaseFragment<VB : ViewBinding, P : BaseContract.Presenter> : Fragment() {
 
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 
-    abstract val presenter: BasePresenter
-
     @Suppress("UNCHECKED_CAST")
     protected val binding: VB
         get() = _binding as VB
+
+    abstract val presenter: P
 
     override fun onCreateView(
         inflater: LayoutInflater,
