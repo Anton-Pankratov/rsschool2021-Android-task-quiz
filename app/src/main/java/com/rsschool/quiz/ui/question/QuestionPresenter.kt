@@ -1,13 +1,9 @@
 package com.rsschool.quiz.ui.question
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.widget.LinearLayout
 import android.widget.RadioGroup
-import androidx.appcompat.widget.AppCompatRadioButton
-import androidx.core.content.ContextCompat
 import com.google.android.material.radiobutton.MaterialRadioButton
-import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BasePresenter
 import com.rsschool.quiz.ui.utils.NEXT
 import com.rsschool.quiz.ui.utils.SUBMIT
@@ -92,7 +88,7 @@ class QuestionPresenter(private val view: QuestionContract.View) :
     }
 
     override fun setOnQuestionButtonListener(
-        listener: QuestionContract.OnQuestionButtonListener
+        listener: QuestionContract.OnQuestionScreenButtonsListener
     ) {
         _questionButtonListener = listener
     }
@@ -113,6 +109,12 @@ class QuestionPresenter(private val view: QuestionContract.View) :
         questionButtonListener?.onPrevious()
     }
 
+    override fun keepSelectedAnswer(answer: Pair<Int, Int>) {
+        answer.apply {
+            repository?.keepUserAnswer(first to second)
+        }
+    }
+
     override fun getQuestionById(questionId: Int) =
         repository?.getQuestions()?.get(questionId - 1)
 
@@ -121,6 +123,6 @@ class QuestionPresenter(private val view: QuestionContract.View) :
 
     private companion object {
         var _questionButtonListener:
-                QuestionContract.OnQuestionButtonListener? = null
+                QuestionContract.OnQuestionScreenButtonsListener? = null
     }
 }

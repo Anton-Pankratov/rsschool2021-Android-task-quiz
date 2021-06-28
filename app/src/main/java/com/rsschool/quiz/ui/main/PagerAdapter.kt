@@ -10,5 +10,6 @@ class PagerAdapter(
 
     override fun getItemCount() = fragments.size
 
-    override fun createFragment(position: Int) = fragments[position]
+    override fun createFragment(position: Int) =
+        fragments[position]
 }

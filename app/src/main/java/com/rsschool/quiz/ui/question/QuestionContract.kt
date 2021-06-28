@@ -10,8 +10,9 @@ import com.rsschool.quiz.ui.base.BaseContract
 interface QuestionContract {
 
     interface View {
+
         fun checkCurrentQuestionId(): Int
-        fun providePresenter(): Presenter
+        fun provideQuestionPresenter(): Presenter
 
         /** Toolbar */
         fun setToolbarTitle(questionId: Int)
@@ -59,19 +60,20 @@ interface QuestionContract {
 
         /** Button's Clicks */
         fun setOnQuestionButtonListener(
-            listener: OnQuestionButtonListener
+            listener: OnQuestionScreenButtonsListener
         )
         fun listenOnNextClick()
         fun listenOnPreviousClick()
         fun onShowNextFragment()
         fun onShowPreviousFragment()
+        fun keepSelectedAnswer(answer: Pair<Int, Int>)
 
         /** Question From Store */
         fun getQuestionById(questionId: Int): QuestionEntity?
         fun getQuestionSize(): Int?
     }
 
-    interface OnQuestionButtonListener {
+    interface OnQuestionScreenButtonsListener {
         fun onPrevious()
         fun onNext()
     }

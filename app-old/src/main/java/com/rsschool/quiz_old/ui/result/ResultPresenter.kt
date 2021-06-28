@@ -1,6 +1,7 @@
 package com.rsschool.quiz_old.ui.result
 
 import android.content.Intent
+import com.rsschool.quiz_old.data.QuestionEntity
 import com.rsschool.quiz_old.ui.base.BasePresenter
 import com.rsschool.quiz_old.utils.OnResultPageButtonsClickListener
 import java.lang.StringBuilder
@@ -10,7 +11,7 @@ class ResultPresenter(val view: ResultContract.View) : BasePresenter(), ResultCo
     private var _onResultButtonsClickListener: OnResultPageButtonsClickListener? = null
     private val onResultButtonsClickListener get() = _onResultButtonsClickListener
 
-    private var _questions: List<com.rsschool.quiz_old.data.QuestionEntity>? = null
+    private var _questions: List<QuestionEntity>? = null
     private val questions get() = _questions
 
     private var _answers: List<Int>? = null
@@ -78,7 +79,7 @@ class ResultPresenter(val view: ResultContract.View) : BasePresenter(), ResultCo
         return stringBuilder.toString()
     }
 
-    private fun com.rsschool.quiz_old.data.QuestionEntity.formQuestionWithAnswerText(index: Int): String {
+    private fun QuestionEntity.formQuestionWithAnswerText(index: Int): String {
         return "\n\n$id) $title" +
                 "\nSelected answer: ${
                     answers?.let {

@@ -63,3 +63,6 @@ enum class Themes(@StyleRes val resId: Int) {
     PURPLE(R.style.Theme_Quiz_Fifth)
 }
 
+enum class Action {
+    NEXT, PREVIOUS, SHARE, REPEAT, EXIT
+}

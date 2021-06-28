@@ -88,13 +88,13 @@ class QuestionFragment(private var questionId: Int = 0) : BaseFragment<FragmentQ
     }
 
     private fun checkUserAnswerNotSelect() {
-        if (binding.questionsRv.checkedRadioButtonId == -1) {
+        if (binding.questionsRg.checkedRadioButtonId == -1) {
             presenter.passAnswerNotSelectedSignal()
         }
     }
 
     private fun checkUserAnswerSelect() {
-        binding.questionsRv.setOnCheckedChangeListener { _, checkedId ->
+        binding.questionsRg.setOnCheckedChangeListener { _, checkedId ->
             presenter.apply {
                 listenSelectedQuestion((questionId - 1) to checkedId)
                 passAnswerSelectedSignal()

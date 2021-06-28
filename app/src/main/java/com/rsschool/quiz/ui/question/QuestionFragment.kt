@@ -13,7 +13,7 @@ import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.utils.NEXT
 import com.rsschool.quiz.ui.utils.getStringResource
 
-class QuestionFragment(private val questionId: Int = 1) :
+class QuestionFragment(private val questionId: Int = 0) :
     BaseFragment<FragmentQuestionBinding, QuestionContract.Presenter>(),
     QuestionContract.View {
 
@@ -47,7 +47,7 @@ class QuestionFragment(private val questionId: Int = 1) :
 
     override fun checkCurrentQuestionId() = questionId
 
-    override fun providePresenter() = presenter
+    override fun provideQuestionPresenter() = presenter
 
     override fun setToolbarTitle(questionId: Int) {
         binding.toolbar.apply {
@@ -90,6 +90,7 @@ class QuestionFragment(private val questionId: Int = 1) :
         binding.apply {
             answersVariantsRg.setOnCheckedChangeListener { group, checkedId ->
                 nextBtn.isEnabled = true
+                presenter.keepSelectedAnswer(questionId - 1 to checkedId - 1)
             }
         }
     }

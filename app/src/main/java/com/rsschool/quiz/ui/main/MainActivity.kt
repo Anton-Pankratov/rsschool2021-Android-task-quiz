@@ -1,10 +1,10 @@
 package com.rsschool.quiz.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rsschool.quiz.databinding.ActivityMainBinding
-import com.rsschool.quiz.ui.utils.NEXT
-import com.rsschool.quiz.ui.utils.PREVIOUS
+import com.rsschool.quiz.ui.utils.Action
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
@@ -19,10 +19,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setContentView(binding.root)
         setPresenter()
 
-        presenter?.apply {
-            onSetViewPager()
-            listenQuestionAction()
-        }
+        presenter?.onSetViewPager()
     }
 
     override fun setPresenter() {
@@ -40,12 +37,13 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
-    override fun setQuestionAction(action: String) {
-        binding.pager.apply {
-            when (action) {
-                PREVIOUS -> currentItem -= 1
-                NEXT -> currentItem += 1
-            }
+    override fun setAction(action: Action, param: Any?) {
+        when (action) {
+            Action.PREVIOUS -> binding.pager.currentItem -= 1
+            Action.NEXT -> binding.pager.currentItem += 1
+            Action.REPEAT -> binding.pager.currentItem = 0
+            Action.SHARE -> startActivity(param as Intent)
+            Action.EXIT -> finishAndRemoveTask()
         }
     }
 }
