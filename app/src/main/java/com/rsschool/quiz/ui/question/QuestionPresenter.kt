@@ -17,9 +17,6 @@ import com.rsschool.quiz.ui.utils.toDp
 class QuestionPresenter(private val view: QuestionContract.View) :
     BasePresenter(), QuestionContract.Presenter {
 
-    private var _questionButtonListener:
-            QuestionContract.OnQuestionButtonListener? = null
-
     private val questionButtonListener
         get() = _questionButtonListener
 
@@ -122,4 +119,8 @@ class QuestionPresenter(private val view: QuestionContract.View) :
     override fun getQuestionSize(): Int? =
         repository?.getQuestionsCount()
 
+    private companion object {
+        var _questionButtonListener:
+                QuestionContract.OnQuestionButtonListener? = null
+    }
 }
