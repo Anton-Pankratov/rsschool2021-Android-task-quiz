@@ -3,8 +3,10 @@ package com.rsschool.quiz.ui.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.rsschool.quiz.databinding.ActivityMainBinding
 import com.rsschool.quiz.ui.utils.Action
+import com.rsschool.quiz.ui.utils.Action.*
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
@@ -32,18 +34,22 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         binding.pager.apply {
             presenter.let {
                 isUserInputEnabled = false
-                adapter = it?.onCreatePagerAdapter(this@MainActivity)
+                setPagerAdapter()
             }
         }
     }
 
     override fun setAction(action: Action, param: Any?) {
         when (action) {
-            Action.PREVIOUS -> binding.pager.currentItem -= 1
-            Action.NEXT -> binding.pager.currentItem += 1
-            Action.REPEAT -> binding.pager.currentItem = 0
-            Action.SHARE -> startActivity(param as Intent)
-            Action.EXIT -> finishAndRemoveTask()
+            NEXT, SUBMIT -> binding.pager.currentItem += 1
+            PREVIOUS -> binding.pager.currentItem -= 1
+            REPEAT -> binding.pager.setPagerAdapter()
+            SHARE -> startActivity(param as Intent)
+            EXIT -> finishAndRemoveTask()
         }
+    }
+
+    private fun ViewPager2.setPagerAdapter() {
+        adapter = presenter?.onCreatePagerAdapter(this@MainActivity)
     }
 }

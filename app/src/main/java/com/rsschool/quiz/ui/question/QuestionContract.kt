@@ -6,6 +6,7 @@ import androidx.annotation.StyleRes
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BaseContract
+import com.rsschool.quiz.ui.utils.Action
 
 interface QuestionContract {
 
@@ -56,7 +57,7 @@ interface QuestionContract {
 
         /** Buttons's View Sets */
         fun configureButtons()
-        fun getNextQuestionButtonMode(): String
+        fun getNextQuestionButtonMode(): Action
 
         /** Button's Clicks */
         fun setOnQuestionButtonListener(

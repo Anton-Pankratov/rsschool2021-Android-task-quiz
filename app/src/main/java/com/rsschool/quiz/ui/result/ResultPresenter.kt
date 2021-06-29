@@ -1,9 +1,14 @@
 package com.rsschool.quiz.ui.result
 
 import android.content.Intent
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BasePresenter
-import java.lang.StringBuilder
+import com.rsschool.quiz.ui.utils.PREPOSITION
+import com.rsschool.quiz.ui.utils.RESULT_CORRECT
+import com.rsschool.quiz.ui.utils.RESULT_INCORRECT
 
 class ResultPresenter(private val view: ResultContract.View) :
     BasePresenter(), ResultContract.Presenter {
@@ -20,23 +25,43 @@ class ResultPresenter(private val view: ResultContract.View) :
     private val resultScore
         get() = _resultScore
 
+    private var correctAnswersRate = ""
+
     override fun onSetResultText() {
-        view.setResultText(calculateResult())
+        view.setResultText(prepareResultText())
     }
+
+    override fun prepareResultText(): String {
+        return "${calculateResult()} $PREPOSITION ${questions?.size}\n\n" +
+                formCorrectAnswersRate()
+    }
+
+    override fun formCorrectAnswersRate() = correctAnswersRate
 
     override fun calculateResult(): Int {
         _questions = repository?.getQuestions()
         _answers = repository?.getAnswers()
-        var result = 0
 
-        answers?.forEachIndexed { index, answer ->
-            if (answer == questions?.get(index)?.answerCorrect) {
-                result += 20
+        questions?.let {
+            answers?.compareWithCorrects(it).apply {
+                _resultScore = this ?: 0
             }
         }
-        result.apply {
-            _resultScore = this
-            return this
+        return resultScore
+    }
+
+    override fun transformText(text: String?): SpannableString {
+        text.apply {
+            return SpannableString(this).apply {
+                PREPOSITION.let { of ->
+                    setSpan(
+                        RelativeSizeSpan(0.7f),
+                        indexOf(of),
+                        indexOf(of) + of.length,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+            }
         }
     }
 
@@ -101,6 +126,20 @@ class ResultPresenter(private val view: ResultContract.View) :
                         answerVariants?.elementAt(it[index])
                     }
                 }"
+    }
+
+    private fun List<Int>.compareWithCorrects(questions: List<QuestionEntity>): Int? {
+        val starRate = StringBuilder()
+        var result = 0
+        forEachIndexed { index, answer ->
+            if (answer != questions[index].answerCorrect) {
+                starRate.append(RESULT_INCORRECT)
+            } else {
+                starRate.append(RESULT_CORRECT)
+                result++
+            }
+        }
+        return result
     }
 
     private companion object {

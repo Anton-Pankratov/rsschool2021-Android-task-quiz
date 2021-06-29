@@ -1,6 +1,7 @@
 package com.rsschool.quiz.ui.result
 
 import android.content.Intent
+import android.text.SpannableString
 import com.rsschool.quiz.ui.base.BaseContract
 
 interface ResultContract {
@@ -9,7 +10,7 @@ interface ResultContract {
 
         fun provideResultPresenter(): Presenter
 
-        fun setResultText(score: Int)
+        fun setResultText(result: String)
         fun getSharingTitleResource(): String?
 
         /** Buttons Clicks */
@@ -23,7 +24,10 @@ interface ResultContract {
 
         /** Result on Screen */
         fun onSetResultText()
+        fun prepareResultText(): String
+        fun formCorrectAnswersRate(): String
         fun calculateResult(): Int
+        fun transformText(text: String?): SpannableString
 
         /** Buttons Clicks*/
         fun onEachButtonClicks()

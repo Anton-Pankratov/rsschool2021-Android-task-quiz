@@ -12,9 +12,10 @@ import androidx.core.graphics.drawable.toDrawable
 import com.rsschool.quiz.R
 import kotlin.math.roundToInt
 
-const val NEXT = "next_fragment"
-const val PREVIOUS = "previous_fragment"
-const val SUBMIT = "submit_answers"
+const val PREPOSITION = "of"
+const val RESULT_CORRECT = "\u2B50"
+const val RESULT_INCORRECT = "\u2605"
+
 const val ANIMATION_DURATION = 360
 
 fun Context.getStringResource(@StringRes resId: Int) =
@@ -22,17 +23,6 @@ fun Context.getStringResource(@StringRes resId: Int) =
 
 fun Context.toDp(value: Int): Int {
     return (value * resources.displayMetrics.density + 0.5f).roundToInt()
-}
-
-fun View.setNewBackground(@ColorRes previousColor: Int, @ColorRes color: Int) {
-    background = TransitionDrawable(
-        arrayOf(
-            ContextCompat.getColor(context, previousColor).toDrawable(),
-            ContextCompat.getColor(context, color).toDrawable()
-        )
-    ).apply {
-        startTransition(ANIMATION_DURATION)
-    }
 }
 
 fun View.setAlphaAnimation() =
@@ -64,5 +54,5 @@ enum class Themes(@StyleRes val resId: Int) {
 }
 
 enum class Action {
-    NEXT, PREVIOUS, SHARE, REPEAT, EXIT
+    NEXT, PREVIOUS, SHARE, REPEAT, EXIT, SUBMIT
 }

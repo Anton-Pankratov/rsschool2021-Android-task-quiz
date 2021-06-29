@@ -5,10 +5,7 @@ import android.widget.LinearLayout
 import android.widget.RadioGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.rsschool.quiz.ui.base.BasePresenter
-import com.rsschool.quiz.ui.utils.NEXT
-import com.rsschool.quiz.ui.utils.SUBMIT
-import com.rsschool.quiz.ui.utils.provideTheme
-import com.rsschool.quiz.ui.utils.toDp
+import com.rsschool.quiz.ui.utils.*
 
 class QuestionPresenter(private val view: QuestionContract.View) :
     BasePresenter(), QuestionContract.Presenter {
@@ -81,9 +78,9 @@ class QuestionPresenter(private val view: QuestionContract.View) :
         }
     }
 
-    override fun getNextQuestionButtonMode(): String {
+    override fun getNextQuestionButtonMode(): Action {
         view.checkCurrentQuestionId().let {
-            return if (it == getQuestionSize()) SUBMIT else NEXT
+            return if (it == getQuestionSize()) Action.SUBMIT else Action.NEXT
         }
     }
 

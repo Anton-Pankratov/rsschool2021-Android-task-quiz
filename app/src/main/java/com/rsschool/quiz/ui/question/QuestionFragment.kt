@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 import com.rsschool.quiz.ui.base.BaseFragment
-import com.rsschool.quiz.ui.utils.NEXT
+import com.rsschool.quiz.ui.utils.Action
 import com.rsschool.quiz.ui.utils.getStringResource
 
 class QuestionFragment(private val questionId: Int = 0) :
@@ -107,7 +107,7 @@ class QuestionFragment(private val questionId: Int = 0) :
     override fun setNextQuestionButtonText() {
         binding.nextBtn.text =
             when (presenter.getNextQuestionButtonMode()) {
-                NEXT -> requireContext().getStringResource(R.string.button_next_question)
+                Action.NEXT -> requireContext().getStringResource(R.string.button_next_question)
                 else -> requireContext().getStringResource(R.string.button_submit_answers)
             }
     }

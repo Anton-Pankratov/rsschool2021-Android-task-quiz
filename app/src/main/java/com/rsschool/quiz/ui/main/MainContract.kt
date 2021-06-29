@@ -1,6 +1,5 @@
 package com.rsschool.quiz.ui.main
 
-import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.rsschool.quiz.ui.base.BaseContract
