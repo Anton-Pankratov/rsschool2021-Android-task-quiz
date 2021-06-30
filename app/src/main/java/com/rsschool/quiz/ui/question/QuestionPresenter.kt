@@ -1,6 +1,7 @@
 package com.rsschool.quiz.ui.question
 
 import android.content.Context
+import android.graphics.Color
 import android.widget.LinearLayout
 import android.widget.RadioGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
@@ -13,6 +14,15 @@ class QuestionPresenter(private val view: QuestionContract.View) :
     private val questionButtonListener
         get() = _questionButtonListener
 
+    private var _currentTheme: Themes? = null
+    private val currentTheme get() = _currentTheme
+
+    init {
+        _currentTheme = getThemeByQuestionId(
+            view.checkCurrentQuestionId()
+        )
+    }
+
     override fun onConfigureToolbar(questionId: Int) {
         view.apply {
             setToolbarTitle(questionId)
@@ -20,8 +30,8 @@ class QuestionPresenter(private val view: QuestionContract.View) :
         }
     }
 
-    override fun onSetCreatedFragmentTheme(questionId: Int) {
-        view.setFragmentTheme(getThemeByQuestionId(questionId))
+    override fun onSetCreatedFragmentTheme() {
+        view.setFragmentTheme(currentTheme?.themeId)
     }
 
     override fun getThemeByQuestionId(questionId: Int) =
@@ -63,6 +73,7 @@ class QuestionPresenter(private val view: QuestionContract.View) :
         setPadding(padding, padding, padding, padding)
         text = answerText
         textSize = 20f
+        setTextColor(Color.WHITE)
         id = answerId
     }
 

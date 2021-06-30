@@ -18,6 +18,10 @@ class MainPresenter(private val view: MainContract.View) :
         initRepository()
     }
 
+    override fun onSetFlags() {
+        view.setWindowFlags()
+    }
+
     override fun initFragmentFactory(fragmentManager: FragmentManager) {
         fragmentManager.fragmentFactory = QuizFragmentFactory
     }

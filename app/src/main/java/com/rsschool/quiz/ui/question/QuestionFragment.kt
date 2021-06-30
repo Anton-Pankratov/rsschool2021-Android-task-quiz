@@ -11,7 +11,6 @@ import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 import com.rsschool.quiz.ui.base.BaseFragment
 import com.rsschool.quiz.ui.utils.Action
-import com.rsschool.quiz.ui.utils.getStringResource
 
 class QuestionFragment(private val questionId: Int = 0) :
     BaseFragment<FragmentQuestionBinding, QuestionContract.Presenter>(),
@@ -25,13 +24,12 @@ class QuestionFragment(private val questionId: Int = 0) :
         get() = QuestionPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        presenter.onSetCreatedFragmentTheme()
         super.onCreate(savedInstanceState)
-        presenter.onSetCreatedFragmentTheme(questionId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         presenter.apply {
             questionId.apply {
                 onConfigureToolbar(this)
@@ -52,7 +50,7 @@ class QuestionFragment(private val questionId: Int = 0) :
     override fun setToolbarTitle(questionId: Int) {
         binding.toolbar.apply {
             title = String.format(
-                context.getStringResource(
+                resources.getString(
                     R.string.toolbar_title
                 ), questionId
             )
@@ -72,8 +70,8 @@ class QuestionFragment(private val questionId: Int = 0) :
         }
     }
 
-    override fun setFragmentTheme(@StyleRes theme: Int) {
-        activity?.setTheme(theme)
+    override fun setFragmentTheme(@StyleRes theme: Int?) {
+        theme?.let { activity?.setTheme(it) }
     }
 
     override fun setQuestionTitle(title: String?) {
@@ -107,8 +105,8 @@ class QuestionFragment(private val questionId: Int = 0) :
     override fun setNextQuestionButtonText() {
         binding.nextBtn.text =
             when (presenter.getNextQuestionButtonMode()) {
-                Action.NEXT -> requireContext().getStringResource(R.string.button_next_question)
-                else -> requireContext().getStringResource(R.string.button_submit_answers)
+                Action.NEXT -> requireContext().resources.getString(R.string.button_next_question)
+                else -> requireContext().resources.getString(R.string.button_submit_answers)
             }
     }
 

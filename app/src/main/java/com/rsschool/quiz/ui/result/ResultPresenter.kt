@@ -7,8 +7,8 @@ import android.text.style.RelativeSizeSpan
 import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BasePresenter
 import com.rsschool.quiz.ui.utils.PREPOSITION
-import com.rsschool.quiz.ui.utils.RESULT_CORRECT
-import com.rsschool.quiz.ui.utils.RESULT_INCORRECT
+import com.rsschool.quiz.ui.utils.RATE_CORRECT
+import com.rsschool.quiz.ui.utils.RATE_INCORRECT
 
 class ResultPresenter(private val view: ResultContract.View) :
     BasePresenter(), ResultContract.Presenter {
@@ -25,15 +25,22 @@ class ResultPresenter(private val view: ResultContract.View) :
     private val resultScore
         get() = _resultScore
 
-    private var correctAnswersRate = ""
+    private var _correctAnswersRate = ""
+    private val correctAnswersRate get() = _correctAnswersRate
 
-    override fun onSetResultText() {
-        view.setResultText(prepareResultText())
+    private var _titleShareText = ""
+    private val titleShareText get() = _titleShareText
+
+    override fun onSetResultText(title: String) {
+        String.format(title, prepareResultText()).apply {
+            _titleShareText = this
+            view.setResultText(this)
+        }
     }
 
     override fun prepareResultText(): String {
-        return "${calculateResult()} $PREPOSITION ${questions?.size}\n\n" +
-                formCorrectAnswersRate()
+        return "${calculateResult()} $PREPOSITION ${questions?.size}" +
+                "\n\n${formCorrectAnswersRate()}"
     }
 
     override fun formCorrectAnswersRate() = correctAnswersRate
@@ -84,11 +91,13 @@ class ResultPresenter(private val view: ResultContract.View) :
             action = Intent.ACTION_SEND
             putExtra(
                 Intent.EXTRA_TEXT,
-                view.getSharingTitleResource()?.let { title ->
-                    String.format(
-                        title, resultScore, formSharingText()
-                    )
-                }
+                "${
+                    view.getSharingTitleResource()?.let { title ->
+                        String.format(
+                            title, prepareResultText(), formSharingText()
+                        )
+                    }
+                }${formSharingText()}"
             )
             type = "text/plain"
         }
@@ -119,6 +128,10 @@ class ResultPresenter(private val view: ResultContract.View) :
         onResultButtonsListener?.onExitClick()
     }
 
+    override fun resetAnswers() {
+        repository?.resetAnswers()
+    }
+
     private fun QuestionEntity.formQuestionWithAnswerText(index: Int): String {
         return "\n\n$id) $title" +
                 "\nSelected answer: ${
@@ -128,17 +141,18 @@ class ResultPresenter(private val view: ResultContract.View) :
                 }"
     }
 
-    private fun List<Int>.compareWithCorrects(questions: List<QuestionEntity>): Int? {
+    private fun List<Int>.compareWithCorrects(questions: List<QuestionEntity>): Int {
         val starRate = StringBuilder()
         var result = 0
         forEachIndexed { index, answer ->
             if (answer != questions[index].answerCorrect) {
-                starRate.append(RESULT_INCORRECT)
+                starRate.append(RATE_INCORRECT)
             } else {
-                starRate.append(RESULT_CORRECT)
+                starRate.append(RATE_CORRECT)
                 result++
             }
         }
+        _correctAnswersRate = starRate.toString()
         return result
     }
 

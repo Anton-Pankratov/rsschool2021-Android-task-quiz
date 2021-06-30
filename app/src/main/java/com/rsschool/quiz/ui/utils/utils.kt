@@ -1,54 +1,34 @@
 package com.rsschool.quiz.ui.utils
 
 import android.content.Context
-import android.graphics.drawable.TransitionDrawable
-import android.view.View
-import android.view.animation.AlphaAnimation
-import androidx.annotation.ColorRes
-import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
 import com.rsschool.quiz.R
 import kotlin.math.roundToInt
 
 const val PREPOSITION = "of"
-const val RESULT_CORRECT = "\u2B50"
-const val RESULT_INCORRECT = "\u2605"
-
-const val ANIMATION_DURATION = 360
-
-fun Context.getStringResource(@StringRes resId: Int) =
-    this.resources.getString(resId)
+const val RATE_CORRECT = "\u2B50"
+const val RATE_INCORRECT = "\u2605"
 
 fun Context.toDp(value: Int): Int {
     return (value * resources.displayMetrics.density + 0.5f).roundToInt()
 }
 
-fun View.setAlphaAnimation() =
-    startAnimation(AlphaAnimation(0f, 1f)
-        .apply {
-            duration = ANIMATION_DURATION.toLong()
-            startOffset = ANIMATION_DURATION.toLong()
-            fillAfter = true
-        })
-
-fun Int.provideTheme(): Int {
+fun Int.provideTheme(): Themes {
     return when (this) {
-        1 -> Themes.ORANGE.resId
-        2 -> Themes.TURQUOISE.resId
-        3 -> Themes.GREEN.resId
-        4 -> Themes.CYAN.resId
-        5 -> Themes.PURPLE.resId
-        else -> Themes.DEFAULT.resId
+        1 -> Themes.ORANGE
+        2 -> Themes.TURQUOISE
+        3 -> Themes.GREEN
+        4 -> Themes.CYAN
+        5 -> Themes.PURPLE
+        else -> Themes.DEFAULT
     }
 }
 
-enum class Themes(@StyleRes val resId: Int) {
+enum class Themes(@StyleRes val themeId: Int) {
     DEFAULT(R.style.Theme_Quiz),
     ORANGE(R.style.Theme_Quiz_First),
     TURQUOISE(R.style.Theme_Quiz_Second),
-    GREEN(R.style.Theme_Quiz_First),
+    GREEN(R.style.Theme_Quiz_Third),
     CYAN(R.style.Theme_Quiz_Fourth),
     PURPLE(R.style.Theme_Quiz_Fifth)
 }

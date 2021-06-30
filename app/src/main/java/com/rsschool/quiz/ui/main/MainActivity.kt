@@ -2,6 +2,7 @@ package com.rsschool.quiz.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.rsschool.quiz.databinding.ActivityMainBinding
@@ -20,8 +21,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setPresenter()
+        presenter?.apply {
+            onSetFlags()
+            onSetViewPager()
+        }
+    }
 
-        presenter?.onSetViewPager()
+    override fun setWindowFlags() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
     }
 
     override fun setPresenter() {

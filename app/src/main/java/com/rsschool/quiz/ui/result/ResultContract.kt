@@ -21,9 +21,8 @@ interface ResultContract {
 
     interface Presenter : BaseContract.Presenter {
 
-
         /** Result on Screen */
-        fun onSetResultText()
+        fun onSetResultText(title: String)
         fun prepareResultText(): String
         fun formCorrectAnswersRate(): String
         fun calculateResult(): Int
@@ -43,6 +42,7 @@ interface ResultContract {
         fun listenOnShareResult()
         fun listenOnRepeatQuiz()
         fun listenExitApp()
+        fun resetAnswers()
     }
 
     interface OnResultScreenButtonsListener {

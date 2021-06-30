@@ -7,6 +7,7 @@ import com.google.android.material.radiobutton.MaterialRadioButton
 import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BaseContract
 import com.rsschool.quiz.ui.utils.Action
+import com.rsschool.quiz.ui.utils.Themes
 
 interface QuestionContract {
 
@@ -20,7 +21,7 @@ interface QuestionContract {
         fun setNavigationBackAction(questionId: Int)
 
         /** Theme */
-        fun setFragmentTheme(@StyleRes theme: Int)
+        fun setFragmentTheme(@StyleRes theme: Int?)
 
         /** Question Views */
         fun setQuestionTitle(title: String?)
@@ -43,8 +44,8 @@ interface QuestionContract {
         fun onConfigureToolbar(questionId: Int)
 
         /** Theme */
-        fun onSetCreatedFragmentTheme(questionId: Int)
-        fun getThemeByQuestionId(questionId: Int): Int
+        fun onSetCreatedFragmentTheme()
+        fun getThemeByQuestionId(questionId: Int): Themes
 
         /** Question Views */
         fun formQuestionTitle(questionId: Int)

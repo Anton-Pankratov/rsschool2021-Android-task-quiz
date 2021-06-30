@@ -13,6 +13,7 @@ interface MainContract {
 
     interface View {
 
+        fun setWindowFlags()
         fun setPresenter()
         fun setFragmentsPager()
 
@@ -23,6 +24,8 @@ interface MainContract {
     }
 
     interface Presenter : BaseContract.Presenter {
+
+        fun onSetFlags()
 
         fun initFragmentFactory(fragmentManager: FragmentManager)
 
