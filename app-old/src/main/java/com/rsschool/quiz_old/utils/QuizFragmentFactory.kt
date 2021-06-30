@@ -1,0 +1,17 @@
+package com.rsschool.quiz_old.utils
+
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
+import com.rsschool.quiz_old.ui.question.QuestionFragment
+import com.rsschool.quiz_old.ui.result.ResultFragment
+
+class QuizFragmentFactory : FragmentFactory() {
+
+    override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+        return when (className) {
+            QuestionFragment::class.java.name -> QuestionFragment()
+            ResultFragment::class.java.name -> ResultFragment()
+            else -> super.instantiate(classLoader, className)
+        }
+    }
+}

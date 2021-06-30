@@ -1,62 +1,93 @@
 package com.rsschool.quiz.ui.main
 
+import android.content.Intent
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.rsschool.quiz.ui.base.BasePresenter
-import com.rsschool.quiz.utils.OnCurrentFragmentListener
-import com.rsschool.quiz.ui.pager.PagerPresenter
-import com.rsschool.quiz.utils.OnChangePageListener
+import com.rsschool.quiz.ui.question.QuestionContract
+import com.rsschool.quiz.ui.question.QuestionFragment
+import com.rsschool.quiz.ui.result.ResultContract
+import com.rsschool.quiz.ui.result.ResultFragment
+import com.rsschool.quiz.ui.utils.Action
+import com.rsschool.quiz.ui.utils.QuizFragmentFactory
 
-class MainPresenter(private val view: MainContract.View) : BasePresenter(), MainContract.Presenter {
+class MainPresenter(private val view: MainContract.View) :
+    BasePresenter(), MainContract.Presenter {
 
-    private var onChangePageListener: OnChangePageListener? = null
-
-    init { initRepository() }
-
-    override fun listenOnNavigationIconClick() {
-        view.setOnNavigationIconClickListener()
+    init {
+        initRepository()
     }
 
-    override fun listenOnNextQuestionClick() {
-        view.showNextQuestionPage()
+    override fun onSetFlags() {
+        view.setWindowFlags()
     }
 
-    override fun listenOnPreviousQuestionClick() {
-        view.showPreviousQuestionPage()
+    override fun initFragmentFactory(fragmentManager: FragmentManager) {
+        fragmentManager.fragmentFactory = QuizFragmentFactory
     }
 
-    override fun makeViewsInvisibleOnResultPage() {
-        view.setViewsInvisibleOnResultPage()
+    override fun onSetViewPager() {
+        view.setFragmentsPager()
     }
 
-    override fun setOnChangePageAction(action: String) {
-        onChangePageListener?.onChangePage(action)
+    override fun onCreatePagerAdapter(activity: MainContract.View): PagerAdapter {
+        return PagerAdapter(activity, formFragments())
     }
 
-    override fun listenCurrentFragment(
-        pagerPresenter: PagerPresenter,
-        onCurrentFragmentListener: OnCurrentFragmentListener
-    ) {
-        pagerPresenter.initOnCurrentFragmentListener(onCurrentFragmentListener)
+    override fun formFragments(): List<Fragment> {
+        val fragments = mutableListOf<Fragment>()
+        repository?.getQuestionsCount().apply {
+            if (this != null) {
+                for (id in 1..this) {
+                    fragments.add(createQuestionFragment(id))
+                    if (id == this) {
+                        fragments.add(createResultFragment())
+                    }
+                }
+            }
+        }
+        return fragments.toList()
     }
 
-    override fun initOnChangePageListener(listener: OnChangePageListener) {
-        onChangePageListener = listener
-    }
+    override fun createQuestionFragment(questionId: Int) =
+        QuestionFragment(questionId).also {
+            it.provideQuestionPresenter()
+                .setOnQuestionButtonListener(
+                    createQuestionButtonsListener()
+                )
+        }
 
-    override fun listenClicksFromResultPage() {
-        view.setOnClicksFromResultPage()
-    }
+    override fun createResultFragment() =
+        ResultFragment().also {
+            it.provideResultPresenter()
+                .setOnResultScreenButtonsClickListener(
+                    createResultButtonsListener()
+                )
+        }
 
-    override fun getAnswersList() = repository?.getAnswers()?.toList()
+    override fun createQuestionButtonsListener() =
+        object : QuestionContract.OnQuestionScreenButtonsListener {
+            override fun onPrevious() {
+                view.setAction(Action.PREVIOUS)
+            }
 
-    override fun resetAnswerList() {
-        repository?.resetAnswers()
-    }
+            override fun onNext() {
+                view.setAction(Action.NEXT)
+            }
+        }
 
-    override fun initNewInstanceOfPager() {
-        view.setNewInstanceOfPager()
-    }
+    override fun createResultButtonsListener() =
+        object : ResultContract.OnResultScreenButtonsListener {
+            override fun onShareClick(shareIntent: Intent) {
+                view.setAction(Action.SHARE, shareIntent)
+            }
 
-    override fun exitFromQuizApp() {
-        view.closeMainActivity()
-    }
+            override fun onRepeatClick() {
+                view.setAction(Action.REPEAT)
+            }
+
+            override fun onExitClick() {
+                view.setAction(Action.EXIT)
+            }
+        }
 }

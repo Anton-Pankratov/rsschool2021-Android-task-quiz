@@ -1,45 +1,49 @@
 package com.rsschool.quiz.ui.main
 
-import androidx.annotation.ColorRes
-import com.rsschool.quiz.utils.OnCurrentFragmentListener
-import com.rsschool.quiz.ui.pager.PagerPresenter
-import com.rsschool.quiz.ui.result.ResultPresenter
-import com.rsschool.quiz.utils.OnChangePageListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.rsschool.quiz.ui.base.BaseContract
+import com.rsschool.quiz.ui.question.QuestionContract
+import com.rsschool.quiz.ui.question.QuestionFragment
+import com.rsschool.quiz.ui.result.ResultContract
+import com.rsschool.quiz.ui.result.ResultFragment
+import com.rsschool.quiz.ui.utils.Action
 
 interface MainContract {
 
     interface View {
-        fun setOnNavigationIconClickListener()
-        fun showNextQuestionPage()
-        fun showPreviousQuestionPage()
-        fun setViewsByCurrentFragment()
-        fun setSignalAboutAnswerNotSelected()
-        fun setSignalAboutAnswerSelected()
-        fun setSignalAboutChangeFragmentTheme(@ColorRes theme: Int)
-        fun setOnClicksFromResultPage()
-        fun setViewsInvisibleOnResultPage()
-        fun setOnChangePageListener(listener: OnChangePageListener)
-        fun setPagerPresenter(pagerPresenter: PagerPresenter)
-        fun setResultPresenter(resultPresenter: ResultPresenter)
-        fun setNewInstanceOfPager()
-        fun closeMainActivity()
+
+        fun setWindowFlags()
+        fun setPresenter()
+        fun setFragmentsPager()
+
+        /** Question and Result Screens Actions*/
+        fun setAction(
+            action: Action, param: Any? = null
+        )
     }
 
-    interface Presenter {
-        fun listenOnNavigationIconClick()
-        fun listenOnNextQuestionClick()
-        fun listenOnPreviousQuestionClick()
-        fun makeViewsInvisibleOnResultPage()
-        fun setOnChangePageAction(action: String)
-        fun listenCurrentFragment(
-            pagerPresenter: PagerPresenter,
-            onCurrentFragmentListener: OnCurrentFragmentListener
-        )
-        fun initOnChangePageListener(listener: OnChangePageListener)
-        fun listenClicksFromResultPage()
-        fun getAnswersList(): List<Int>?
-        fun resetAnswerList()
-        fun initNewInstanceOfPager()
-        fun exitFromQuizApp()
+    interface Presenter : BaseContract.Presenter {
+
+        fun onSetFlags()
+
+        fun initFragmentFactory(fragmentManager: FragmentManager)
+
+        /** View Pager */
+        fun onSetViewPager()
+        fun onCreatePagerAdapter(activity: View): PagerAdapter
+
+        /** Form Fragments */
+        fun formFragments(): List<Fragment>
+        fun createQuestionFragment(questionId: Int): QuestionFragment
+        fun createResultFragment(): ResultFragment
+
+        /** Create Action Buttons Listeners */
+        fun createQuestionButtonsListener():
+                QuestionContract.OnQuestionScreenButtonsListener
+
+        fun createResultButtonsListener():
+                ResultContract.OnResultScreenButtonsListener
+
     }
 }

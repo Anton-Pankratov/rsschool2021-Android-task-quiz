@@ -1,13 +1,11 @@
 package com.rsschool.quiz.data.repository
 
-import android.util.Log
-import com.rsschool.quiz.data.Storage
-
 class QuizRepository : IRepository {
 
-    private val storage = Storage
+    private val storage = com.rsschool.quiz.data.Storage
 
-    override fun getQuestionById(questionId: Int) = storage.questions[questionId - 1]
+    override fun getQuestionById(questionId: Int) =
+        storage.questions[questionId - 1]
 
     override fun getQuestionsCount() = storage.questions.size
 
@@ -20,7 +18,6 @@ class QuizRepository : IRepository {
             answer.apply {
                 set(first, second)
             }
-            Log.d("ANSWERS", "Answers is $this")
         }
     }
 
