@@ -8,8 +8,8 @@ import com.rsschool.quiz.ui.question.QuestionContract
 import com.rsschool.quiz.ui.question.QuestionFragment
 import com.rsschool.quiz.ui.result.ResultContract
 import com.rsschool.quiz.ui.result.ResultFragment
-import com.rsschool.quiz.ui.utils.Action
-import com.rsschool.quiz.ui.utils.QuizFragmentFactory
+import com.rsschool.quiz.utils.Action
+import com.rsschool.quiz.utils.QuizFragmentFactory
 
 class MainPresenter(private val view: MainContract.View) :
     BasePresenter(), MainContract.Presenter {

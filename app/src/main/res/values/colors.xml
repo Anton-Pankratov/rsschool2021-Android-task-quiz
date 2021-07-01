@@ -3,7 +3,7 @@
     <color name="question_background_color">#2B2B2B</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="magenta_100">#EDE361E8</color>
+    <color name="magenta_100">#E361E8</color>
     <color name="magenta_100_light">#F685E7</color>
     <color name="magenta_100_dark">#C55FD6</color>
     <color name="yellow_100">#fff9c4</color>

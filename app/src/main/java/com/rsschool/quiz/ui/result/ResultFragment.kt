@@ -5,9 +5,11 @@ import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentResultBinding
 import com.rsschool.quiz.ui.base.BaseFragment
+import com.rsschool.quiz.utils.setAlphaAnimation
 
 class ResultFragment :
     BaseFragment<FragmentResultBinding, ResultContract.Presenter>(), ResultContract.View {
@@ -25,11 +27,21 @@ class ResultFragment :
 
     override fun onResume() {
         super.onResume()
-        presenter.onSetResultText(
-            resources.getString(
-                R.string.result_title_total_score
+        presenter.apply {
+            onSetAnimation()
+            onSetResultText(
+                resources.getString(
+                    R.string.result_title_total_score
+                )
             )
-        )
+        }
+    }
+
+    override fun setAnimation() {
+        binding.root.apply {
+            isVisible = true
+            setAlphaAnimation()
+        }
     }
 
     override fun provideResultPresenter() = presenter

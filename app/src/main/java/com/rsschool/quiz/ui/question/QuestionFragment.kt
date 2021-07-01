@@ -1,16 +1,21 @@
 package com.rsschool.quiz.ui.question
 
+import android.content.Context
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 import com.rsschool.quiz.ui.base.BaseFragment
-import com.rsschool.quiz.ui.utils.Action
+import com.rsschool.quiz.utils.Action
 
 class QuestionFragment(private val questionId: Int = 0) :
     BaseFragment<FragmentQuestionBinding, QuestionContract.Presenter>(),
@@ -43,6 +48,11 @@ class QuestionFragment(private val questionId: Int = 0) :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.window?.statusBarColor = requireActivity().getThemeColor(android.R.attr.statusBarColor)
+    }
+
     override fun checkCurrentQuestionId() = questionId
 
     override fun provideQuestionPresenter() = presenter
@@ -72,6 +82,12 @@ class QuestionFragment(private val questionId: Int = 0) :
 
     override fun setFragmentTheme(@StyleRes theme: Int?) {
         theme?.let { activity?.setTheme(it) }
+    }
+
+    fun Context.getThemeColor(@AttrRes attrRes: Int): Int {
+        val typedValue = TypedValue()
+        theme.resolveAttribute (attrRes, typedValue, true)
+        return typedValue.data
     }
 
     override fun setQuestionTitle(title: String?) {

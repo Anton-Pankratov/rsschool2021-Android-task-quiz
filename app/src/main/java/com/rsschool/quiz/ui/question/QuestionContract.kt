@@ -6,8 +6,8 @@ import androidx.annotation.StyleRes
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BaseContract
-import com.rsschool.quiz.ui.utils.Action
-import com.rsschool.quiz.ui.utils.Themes
+import com.rsschool.quiz.utils.Action
+import com.rsschool.quiz.utils.Themes
 
 interface QuestionContract {
 

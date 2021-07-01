@@ -1,6 +1,8 @@
-package com.rsschool.quiz.ui.utils
+package com.rsschool.quiz.utils
 
 import android.content.Context
+import android.view.View
+import android.view.animation.AlphaAnimation
 import androidx.annotation.StyleRes
 import com.rsschool.quiz.R
 import kotlin.math.roundToInt
@@ -12,6 +14,15 @@ const val RATE_INCORRECT = "\u2605"
 fun Context.toDp(value: Int): Int {
     return (value * resources.displayMetrics.density + 0.5f).roundToInt()
 }
+
+fun View.setAlphaAnimation() =
+    startAnimation(
+        AlphaAnimation(0f, 1f)
+        .apply {
+            duration = 360L
+            startOffset = 360L
+            fillAfter = true
+        })
 
 fun Int.provideTheme(): Themes {
     return when (this) {

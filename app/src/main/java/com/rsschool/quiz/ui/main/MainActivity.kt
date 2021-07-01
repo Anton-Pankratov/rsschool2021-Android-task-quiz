@@ -6,8 +6,8 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.rsschool.quiz.databinding.ActivityMainBinding
-import com.rsschool.quiz.ui.utils.Action
-import com.rsschool.quiz.ui.utils.Action.*
+import com.rsschool.quiz.utils.Action
+import com.rsschool.quiz.utils.Action.*
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 

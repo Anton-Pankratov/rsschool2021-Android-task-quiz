@@ -6,9 +6,9 @@ import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import com.rsschool.quiz.data.QuestionEntity
 import com.rsschool.quiz.ui.base.BasePresenter
-import com.rsschool.quiz.ui.utils.PREPOSITION
-import com.rsschool.quiz.ui.utils.RATE_CORRECT
-import com.rsschool.quiz.ui.utils.RATE_INCORRECT
+import com.rsschool.quiz.utils.PREPOSITION
+import com.rsschool.quiz.utils.RATE_CORRECT
+import com.rsschool.quiz.utils.RATE_INCORRECT
 
 class ResultPresenter(private val view: ResultContract.View) :
     BasePresenter(), ResultContract.Presenter {
@@ -30,6 +30,10 @@ class ResultPresenter(private val view: ResultContract.View) :
 
     private var _titleShareText = ""
     private val titleShareText get() = _titleShareText
+
+    override fun onSetAnimation() {
+        view.setAnimation()
+    }
 
     override fun onSetResultText(title: String) {
         String.format(title, prepareResultText()).apply {
@@ -89,6 +93,7 @@ class ResultPresenter(private val view: ResultContract.View) :
     override fun formShareIntent(): Intent {
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_SUBJECT, "Quiz result")
             putExtra(
                 Intent.EXTRA_TEXT,
                 "${

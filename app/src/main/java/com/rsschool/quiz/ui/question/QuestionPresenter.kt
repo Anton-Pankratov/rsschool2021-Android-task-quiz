@@ -6,7 +6,7 @@ import android.widget.LinearLayout
 import android.widget.RadioGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.rsschool.quiz.ui.base.BasePresenter
-import com.rsschool.quiz.ui.utils.*
+import com.rsschool.quiz.utils.*
 
 class QuestionPresenter(private val view: QuestionContract.View) :
     BasePresenter(), QuestionContract.Presenter {

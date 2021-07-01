@@ -8,6 +8,8 @@ interface ResultContract {
 
     interface View {
 
+        fun setAnimation()
+
         fun provideResultPresenter(): Presenter
 
         fun setResultText(result: String)
@@ -20,6 +22,8 @@ interface ResultContract {
     }
 
     interface Presenter : BaseContract.Presenter {
+
+        fun onSetAnimation()
 
         /** Result on Screen */
         fun onSetResultText(title: String)

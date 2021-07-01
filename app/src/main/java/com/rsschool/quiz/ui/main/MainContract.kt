@@ -7,7 +7,7 @@ import com.rsschool.quiz.ui.question.QuestionContract
 import com.rsschool.quiz.ui.question.QuestionFragment
 import com.rsschool.quiz.ui.result.ResultContract
 import com.rsschool.quiz.ui.result.ResultFragment
-import com.rsschool.quiz.ui.utils.Action
+import com.rsschool.quiz.utils.Action
 
 interface MainContract {
 

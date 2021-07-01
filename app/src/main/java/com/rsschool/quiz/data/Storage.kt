@@ -48,7 +48,7 @@ object Storage {
         id = 5,
         title = "Which Java language class has the canExecute() function without" +
                 " input parameters and returning a Boolean result?",
-        answerVariants = listOf("DatePicker", "File", "ContentResolver", "String", "Activity"),
+        answerVariants = listOf("DatePicker", "File", "ContentResolver", "String", "CountDownTimer"),
         answerCorrect = 1
     )
 }
