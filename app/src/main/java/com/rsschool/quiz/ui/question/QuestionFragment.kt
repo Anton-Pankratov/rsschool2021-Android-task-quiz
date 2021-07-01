@@ -10,8 +10,6 @@ import android.widget.Button
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentQuestionBinding
 import com.rsschool.quiz.ui.base.BaseFragment
@@ -48,11 +46,6 @@ class QuestionFragment(private val questionId: Int = 0) :
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.window?.statusBarColor = requireActivity().getThemeColor(android.R.attr.statusBarColor)
-    }
-
     override fun checkCurrentQuestionId() = questionId
 
     override fun provideQuestionPresenter() = presenter
@@ -84,12 +77,6 @@ class QuestionFragment(private val questionId: Int = 0) :
         theme?.let { activity?.setTheme(it) }
     }
 
-    fun Context.getThemeColor(@AttrRes attrRes: Int): Int {
-        val typedValue = TypedValue()
-        theme.resolveAttribute (attrRes, typedValue, true)
-        return typedValue.data
-    }
-
     override fun setQuestionTitle(title: String?) {
         binding.questionTitleTv.text = title
     }
@@ -108,7 +95,6 @@ class QuestionFragment(private val questionId: Int = 0) :
             }
         }
     }
-
 
     override fun setNextQuestionAccessMode() {
         binding.apply {
